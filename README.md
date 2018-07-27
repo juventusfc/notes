@@ -47,5 +47,6 @@
 ## Others
 
 * [软技能-代码之外的生存指南](/Others/软技能-代码之外的生存指南.md)
-* [ CommonJS 和 ES6 Modules](/Others/CommonJS和ES6Modules.md)
-* [ Webpack4 使用指南](/Others/webpack4-guide.md)
+* [CommonJS 和 ES6 Modules](/Others/CommonJS和ES6Modules.md)
+* [Webpack4使用指南](/Others/webpack4-guide.md)
+* [Git使用技巧](/Others/Git使用技巧.md)
