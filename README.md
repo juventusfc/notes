@@ -15,7 +15,7 @@
 * [YDKJS 笔记--Async&Performance(四)](</YDKJS/YDKJS笔记--Async&Performance(四)/README.md>)
 * [YDKJS 笔记--Async&Performance(五)](</YDKJS/YDKJS笔记--Async&Performance(五)/README.md>)
 
-## FP(完结)
+## FP
 
 * [Functional-Light-JS 读书笔记(一)-参数转化](/FP/参数转化.md)
 * [Functional-Light-JS 读书笔记(二)-Compose && Pipe](/FP/Compose&&Pipe.md)
