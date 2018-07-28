@@ -1,8 +1,10 @@
-# Compose
+# Compose & Pipe
+
+## Compose
 
 Compose 用于将几个功能组装起来。从右往左执行。
 
-_finalValue <-- func1 <-- func2 <-- ... <-- funcN <-- origValue_
+`finalValue <-- func1 <-- func2 <-- ... <-- funcN <-- origValue`
 
 *words*输入为字符串，输出为数组。*unique*输入为数组，输出为清除重复元素了的数组。
 
@@ -57,7 +59,7 @@ wordsUsed;
 // ["to","compose","two","functions","together","pass","the","output","of","first","function","call","as","input","second"]
 ```
 
-# Pipe
+## Pipe
 
 从左往右执行。
 

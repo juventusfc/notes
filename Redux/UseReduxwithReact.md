@@ -39,7 +39,7 @@ const todoApp = combineReducers({
 });
 ```
 
-## 例子:
+## 例子
 
 以下代码可在[JSBin](https://jsbin.com/vozesub/edit?js,output)中运行
 

@@ -89,10 +89,10 @@ module.exports = config;
 
 Loaders 用于 webpack 识别打包 js 文件之外的文件类型，如 css、txt 等。
 
-1.  安装 loaders
+1. 安装 loaders
     > npm install --save-dev css-loader  
     > npm install --save-dev ts-loader
-2.  使用 loaders
+2. 使用 loaders
     > ```javascript
     > module.exports = {
     >   module: {

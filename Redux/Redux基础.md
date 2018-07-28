@@ -112,10 +112,10 @@ export default todoApp
 
 _Store_ 是存放应用 state 的地方。常用方法有：
 
-1.  getState() // 获取当前 state
-2.  dispatch(action) // 发出一个 action。 Store 自动调用 reducer 更新 state。
-3.  subscribe(listener) // 当 state 有更改后，会执行回调函数
-4.  unsubscribe listener 通过  
+1. getState() // 获取当前 state
+2. dispatch(action) // 发出一个 action。 Store 自动调用 reducer 更新 state。
+3. subscribe(listener) // 当 state 有更改后，会执行回调函数
+4. unsubscribe listener 通过  
     `const listener1 = subscribe(listener); listener1();` 实现。
 
 _Store_ 中的 state 类似于：
@@ -143,7 +143,7 @@ const store = createStore(todoApp);
 
 ### 数据流向
 
-1.  store.dispatch(action)发起一个 action
-2.  store 调用 reducer，产生新的 state
-3.  store 保存新的 state
-4.  由于 state 有了更新，执行 subscribe 中的监听函数
+1. store.dispatch(action)发起一个 action
+2. store 调用 reducer，产生新的 state
+3. store 保存新的 state
+4. 由于 state 有了更新，执行 subscribe 中的监听函数

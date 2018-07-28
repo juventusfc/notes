@@ -6,7 +6,7 @@
 
 ## 例子
 
-```
+```javascript
 .
 └── /src/
     ├── /target2.html

@@ -69,7 +69,7 @@ export default VisibleTodoList
 
 container component:
 
-```
+```javascript
 import React from 'react'
 import PropTypes from 'prop-types'
 import Todo from './Todo'

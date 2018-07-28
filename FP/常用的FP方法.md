@@ -30,9 +30,9 @@ function map(mapperFn, arr) {
 
 ### Functor
 
-1.  A functor is a value that has a utility for using an operator function on that value, which preserves composition.
+1. A functor is a value that has a utility for using an operator function on that value, which preserves composition.
 
-2.  Functor is `an object` that has `map` function. For Example, Array is a functor.本人更倾向于该种说法。
+2. Functor is `an object` that has `map` function. For Example, Array is a functor.本人更倾向于该种说法。
 
 ## Filter
 
@@ -57,9 +57,9 @@ function filter(predicateFn, arr) {
 
 Reduce 有两种方式：
 
-1.  指定初始值：
+1. 指定初始值：
     ![reduce](./images/reduce.png)
-2.  不指定初始值，array 里的第一个值作为初始值：
+2. 不指定初始值，array 里的第一个值作为初始值：
     ![reduce2](./images/reduce2.png)
 
 ### ES6 自带的 reduce
@@ -179,7 +179,7 @@ reduce(map(filter([1, 2, 3, 4, 5], isOdd), double), sum, 0); // 18 该方法不�
 
 改进工具箱里的方法：
 
-```
+```javascript
 // 绑定this
 var partialThis =
     (fn,...presetArgs) =>
