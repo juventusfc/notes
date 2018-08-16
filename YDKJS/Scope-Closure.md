@@ -59,18 +59,15 @@ JS 的作用域类型是 Lexical Scope，有些语言的 Scope 类型是 Dynamic
   }
   ```
 
-## Function vs. Block Scope
+## 函数作用域和块作用域
 
-创建 Scope 的两种方式:
+作用域是封装的一种。
 
-1. Function
-2. Blocks
-
-### Function as scope
+### 函数作用域
 
 #### 函数声明 declaration
 
-function foo(){} 在全局定义了 foo
+`function foo(){..}` 在全局定义了 foo
 
 ```javascript
 var a = 2;
@@ -83,11 +80,11 @@ foo();
 console.log(a); // 2
 ```
 
-`注意`：上述代码会在 global 上定义 foo，造成全局污染。可以使用 IIFE，避免函数名的全局污染.
+**注意**：上述代码会在 global 上定义 foo，造成全局污染。可以使用 IIFE，避免函数名的全局污染.
 
 #### 函数表达式 expression
 
-(function foo(){})或(function(){}) 不会在全局定义 foo
+`(function foo(){..})` 或 `(function(){..})` 不会在全局定义 foo
 
 ```javascript
 var a = 2;
@@ -109,8 +106,14 @@ var x = function bar() {
 };
 ```
 
-比较上面两种定义函数的方式：第一种，将匿名函数指定给 foo。第二种，将 bar 函数指定给 x。但是，不能直接在之后调用 bar()，否则会报引用错误。  
-在定义`回调函数表达式`时，最好将匿名函数加上函数名称，便于 debug
+比较上面两种定义函数的方式：
+
+1. 将匿名函数指定给 foo。
+2. 将 bar 函数指定给 x。但是，不能直接在之后调用 bar()，否则会报引用错误。
+
+#### 回调函数
+
+在定义 `回调函数表达式` 时，最好将匿名函数加上函数名称，便于 debug
 
 ```javascript
 setTimeout(function timeoutHandler() {
@@ -118,7 +121,18 @@ setTimeout(function timeoutHandler() {
 }, 1000);
 ```
 
-### Blocks as scope
+#### IIFE
+
+`IIFE = 函数表达式 + ()` 表示立即执行函数表达式
+
+```javascript
+(function foo() {
+  var a = 3;
+  console.log(a); // 3
+})(); //IIFE 立即执行函数表达式
+```
+
+### 块作用域
 
 JS 没有 Block 的概念，如：
 
@@ -128,12 +142,12 @@ for (var i = 0; i < 10; i++) {
 }
 ```
 
-i 并不是只在{}中，它在全局的 Scope 中。为了避免无谓的全局变量定义，可以使用以下方法在 block 里定义变量：
+i 并不是只在{..}中，它在全局的 Scope 中。为了避免无谓的全局变量定义，可以使用以下方法在块里定义变量：
 
-- with
-- try()catch(){}中在 catch 中定义的
-- let
-- const
+- **with**
+- **try()catch(){..}** 中在 catch 中定义的变量只能在 catch 块{}中访问
+- **let** 在{}中用 let 定义的变量，只能在该{}中访问
+- **const** 在{}中用 const 定义的变量，只能在该{}中访问
 
 ## Hoisting 变量提升
 
@@ -149,13 +163,23 @@ console.log(a);
 var a = 2;
 ```
 
-执行结果是打印 undefined。原因是：变量和函数声明先由 compiler 读取，然后由 engine 执行代码。在这里，先将 var a = 2 拆成 var a;和 a =2;compliler 先执行 var a；然后执行 console.log( a );之后执行 a=2
+执行结果是打印 undefined。原因是：变量和函数声明先由 compiler 读取，然后由 engine 执行代码。在这里，先将 `var a = 2` 拆成 `var a;` 和 `a =2;` compiler 先执行 `var a;` 然后执行 `console.log( a );` 之后执行 `a=2;`
 
-## Closure
+## Closure 闭包
 
 > Closure is when a function is able to remember and access its lexical scope even when that function is executing **outside** its lexical scope.
+>
+> 当内部函数是在定义它的词法作用域之外（外部函数）执行，仍然可以记住并访问它所在的词法作用域，这时就产生了闭包。
 
-即：一个函数在他定义的 Scope 之外被调用，就是 Closure
+即：一个函数在他定义的 Scope 之外被调用，就是 Closure。
+
+下面的例子中，涉及 3 个作用域：
+
+1. 全局作用域: 其中的变量有 foo
+2. foo 作用域：其中的变量有 a 和 bar
+3. bar 作用域
+
+bar 的词法作用域是 foo，当执行 `baz()` 时，其实是在全局作用域中执行了 `bar()` ，由于闭包，bar 还能继续访问 foo 中的 a。
 
 ```javascript
 function foo() {
@@ -170,8 +194,10 @@ function foo() {
 
 var baz = foo(); //bar函数被返回，赋值给baz。baz保留了对foo scope中a的也引用。
 
-baz(); // 执行baz函数。这意味着在foo scope之外，bar被调用了。bar对foo scope的引用就是closure。closure使得bar能继续调用foo scope中的a。
+baz(); //2 执行baz函数。这意味着在foo scope之外，bar被调用了。bar对foo scope的引用就是closure。closure使得bar能继续调用foo scope中的a。
 ```
+
+只要使用了回调函数，实际上就是在使用闭包。
 
 ```javascript
 function wait(message) {
