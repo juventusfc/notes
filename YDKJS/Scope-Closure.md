@@ -1,66 +1,70 @@
+# 作用域和闭包
+
 ## 编译、执行时发生的事
 
-当执行`var a = 2;`时，发生了什么呢？  
-`Compiler`进行编译，询问`Scope`是否有 a 的值，如果没有，在`Scope`中新建 a。`Compiler`编译完后，由`Engine`进行执行。在执行过程中，`Engine`询问`Scope`是否有 a。如果没有，去上一层查找。
+当执行 `var a = 2;` 时，发生了什么呢？  
+`Compiler` 进行编译，询问 `Scope` 是否有 a 的值，如果没有，在 `Scope` 中新建 a。`Compiler` 编译完后，由 `Engine` 进行执行。在执行过程中，`Engine` 询问 `Scope` 是否有 a 。如果没有，去上一层查找。
 ![compile](./images/compile.PNG)
 
 ### LHS && RHS
 
-在`Engine`询问`Scope`时，会涉及查找问题。分为两种查找方式：
-LHS(left-hand side) 寻找变量容器本身，RHS(righte-hand side) 寻找变量容器中的值。如 var a=2，变量容器是 a，2 是其中的值。
+在 `Engine` 询问 `Scope` 时，会涉及查找问题。分为两种查找方式：
+LHS(left-hand side) 寻找变量容器本身，RHS(righte-hand side) 寻找变量容器中的值。如 `var a=2`，变量容器是 a，2 是其中的值。
 
-如果在执行 console.log(a)没找到 a，报 ReferenceError。如果 RHS 找到了，但执行了值不具备的方法或属性，报 TypeError。
+如果在执行 `console.log(a)` 没找到 a，报 ReferenceError。如果 RHS 找到了，但执行了值不具备的方法或属性，报 TypeError。
 ![LHS](./images/LHS.PNG)
 
-## Lexical Scope
+## 词法作用域
 
-JS 的 Scope 类型是 Lexical Scope，有些语言的 Scope 类型是 Dynamic Scope(本文不做解释。如果有时间，以后再谈这种方式)。顾名思义，Lexical Scope 就是指在 Compiler 执行时，变量所处的范围。一般来说，Scope 就是指代码书写时所处的代码块。
+JS 的作用域类型是 Lexical Scope，有些语言的 Scope 类型是 Dynamic Scope(本文不做解释。如果有时间，以后再谈这种方式)。顾名思义，词法作用域就是指在 Compiler 执行时，变量所处的范围。一般来说，词法作用域就是指**代码书写时所处的代码块**。
 
-## Scope 欺骗
+### 作用域欺骗
 
-有 eval 和 with 两种方式。但由于这两种是执行时才会确定代码，所以会**有性能问题**。尽量避免使用。
+有 `eval` 和 `with` 两种方式。但由于这两种是执行时才会确定代码，所以会**有性能问题**。尽量避免使用。
 
-`eval`: eval(str)中的 str 就像在编码时就在那一样，相当于 var b = 3;入侵到 foo 的作用域中。
+- eval
 
-```javascript
-function foo(str, a) {
-  eval(str); // cheating!
-  console.log(a, b);
-}
+  `eval(str)` 中的 str 就像在编码时就在那一样，相当于 `var b = 3;` 入侵到 foo 的作用域中。
 
-var b = 2;
+  ```javascript
+  function foo(str, a) {
+    eval(str); // cheating!
+    console.log(a, b);
+  }
+  var b = 2;
+  foo("var b = 3;", 1); // 1 3
+  ```
 
-foo("var b = 3;", 1); // 1 3
-```
+- with
 
-`with`: with(obj){}相当于在 obj 对象上修改属性值。如果新增了属性，会泄漏到全局，造成全局污染。
+  with(obj){}相当于在 obj 对象上修改属性值。如果新增了属性，会泄漏到全局，造成全局污染。
 
-```javascript
-var obj = {
-  a: 1,
-  b: 2,
-  c: 3
-};
+  ```javascript
+  var obj = {
+    a: 1,
+    b: 2,
+    c: 3
+  };
 
-// more "tedious" to repeat "obj"
-obj.a = 2;
-obj.b = 3;
-obj.c = 4;
+  // more "tedious" to repeat "obj"
+  obj.a = 2;
+  obj.b = 3;
+  obj.c = 4;
 
-// "easier" short-hand
-with (obj) {
-  a = 3;
-  b = 4;
-  c = 5;
-}
-```
+  // "easier" short-hand
+  with (obj) {
+    a = 3;
+    b = 4;
+    c = 5;
+  }
+  ```
 
 ## Function vs. Block Scope
 
 创建 Scope 的两种方式:
 
-1.  Function
-2.  Blocks
+1. Function
+2. Blocks
 
 ### Function as scope
 
@@ -108,10 +112,10 @@ var x = function bar() {
 比较上面两种定义函数的方式：第一种，将匿名函数指定给 foo。第二种，将 bar 函数指定给 x。但是，不能直接在之后调用 bar()，否则会报引用错误。  
 在定义`回调函数表达式`时，最好将匿名函数加上函数名称，便于 debug
 
-```
-setTimeout( function timeoutHandler(){
-  console.log( "I waited 1 second!" );
-}, 1000 );
+```javascript
+setTimeout(function timeoutHandler() {
+  console.log("I waited 1 second!");
+}, 1000);
 ```
 
 ### Blocks as scope
@@ -126,10 +130,10 @@ for (var i = 0; i < 10; i++) {
 
 i 并不是只在{}中，它在全局的 Scope 中。为了避免无谓的全局变量定义，可以使用以下方法在 block 里定义变量：
 
-* with
-* try()catch(){}中在 catch 中定义的
-* let
-* const
+- with
+- try()catch(){}中在 catch 中定义的
+- let
+- const
 
 ## Hoisting 变量提升
 
@@ -137,11 +141,11 @@ i 并不是只在{}中，它在全局的 Scope 中。为了避免无谓的全局
 
 注意：
 
-1.  只有声明会提升，赋值不提升。进一步来说，对于函数，函数声明会提升，但是，函数表达式不提升。
-2.  先提升函数后提升变量。
+1. 只有声明会提升，赋值不提升。进一步来说，对于函数，函数声明会提升，但是，函数表达式不提升。
+2. 先提升函数后提升变量。
 
-```
-console.log( a );
+```javascript
+console.log(a);
 var a = 2;
 ```
 
