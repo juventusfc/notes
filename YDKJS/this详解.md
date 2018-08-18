@@ -2,9 +2,11 @@
 
 ## 主要知识点
 
-this 是运行时绑定的。在不考虑 arrow function 的情况下，`跟声明 this 时的 scope 无关`。arrow function 默认 this 绑定到声明的地方。
+this 是运行时绑定的，**不是指向自身**，**也不是指向词法作用域**。
 
-## call-site 调用点
+this 实际上是在函数被调用时发生的绑定，指向什么完全取决于函数在哪里被调用。
+
+## call-site 调用位置
 
 * call-site: 方法在哪里被真正调用，不是在哪里被声明—-**跟 this 关系很大。决定了 this 的值**
 * call-stack: 方法执行时的执行栈。
@@ -29,20 +31,20 @@ function foo() {
 baz(); // <-- `baz` 的调用点
 ```
 
-## 绑定规则及优先级
+## 4 种绑定规则及优先级
 
 在 JavaScript 函数执行期间，this  指向的对象可以通过函数的调用点来确定。另外需要注意的是，这 4 个规则的优先级各不相同。接下来我们先看看这 4 个规则分别是什么，再确定它们的优先级。
 
 ### 默认绑定
 
-默认绑定的 this 值由调用点决定。单独的函数调用一定是这种情况。比如来看下面的代码：
+**默认绑定的 this 值由调用点决定**。单独的函数调用一定是这种情况。比如来看下面的代码：
 
 ```javascript
 function foo() {
   console.log( this.a );
 }
 var a = 2;
-foo(); *// 2
+foo(); // 2
 ```
 
 在上面这段代码中，函数的调用点是全局作用域，那么默认绑定会生效，`this`  指向全局对象。  
@@ -142,9 +144,11 @@ function setTimeout(fn, delay) {
 
 相当于将 obj.foo 赋值给 fn，然后执行 fn()。fn 相当于另外一个对 foo 函数的引用。所以 this 指向了 global。
 
-### 显式绑定 call apply 或 bind
+### 显式绑定 call 和 apply 或 bind
 
-在 JavaScript 中，所有的函数都可以调用  `call`  和  `apply`  来显式的绑定  `this`。`注意`：call 和 apply 是直接执行函数，bind 是返回一个新的函数。
+在 JavaScript 中，所有的函数都可以调用  `call`  和  `apply`  来显式的绑定  `this`。
+
+**注意**：call 和 apply 是直接执行函数，bind 是返回一个新的函数。
 
 ```javascript
 function foo() {
@@ -279,9 +283,10 @@ class A {
 * 如果以上都不是，那么就是默认绑定，`this`  指向全局变量或者  `undefined` (strict mode 下)。
   > foo()
 
-### 箭头函数绑定
+## 箭头函数绑定
 
-ES6 的新特性。this 绑定到函数定义时的 scope 中。这个 scope 对应的对象由调用点决定。  
+**arrow function** 是ES6 的新特性，this 由调用点决定。  
+
 如下所示，箭头函数定义在 foo 函数中。当执行 foo 时，foo 被绑定到了 obj 上，那么，此时箭头函数中的 this 也被绑定到了 obj 上。
 
 ```javascript
@@ -316,3 +321,20 @@ var obj = {
 
 foo.call(obj); // 2
 ```
+
+```javascript
+function foo() {
+  var a = 10; // inner
+  setTimeout(() => {
+    console.log(this.a);
+  }, 100);
+}
+var a = 100; //outer
+foo() // 100 Value is is outer value。当执行 foo() 时
+// 1. 执行 foo 中的 `var a = 10`;
+// 2. 执行 setTimeout();
+// 3. 等待 1000ms 后，执行箭头函数。
+//    a) 箭头函数的this绑定到定义函数时的Scope中，该Scope由调用点确定。
+//    b) 这里的调用点是全局，所以引用了全局的 a
+```
+
