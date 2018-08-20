@@ -14,6 +14,7 @@ this 实际上是在函数被调用时发生的绑定，指向什么完全取决
 通常，call-site 在执行栈之前。
 
 ```javascript
+debugger;
 function baz() {
   // 执行栈是: `baz`
   console.log("baz");
@@ -30,6 +31,10 @@ function foo() {
 }
 baz(); // <-- `baz` 的调用点
 ```
+
+我们可以使用浏览器的开发者工具进行查看调用位置。下图中，执行栈是 foo，调用位置是foo下面的bar。
+
+![callSite](./images/callSite.png)
 
 ## 4 种绑定规则及优先级
 
@@ -48,6 +53,7 @@ foo(); // 2
 ```
 
 在上面这段代码中，函数的调用点是全局作用域，那么默认绑定会生效，`this`  指向全局对象。  
+
 如果函数运行在[strict mode](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Strict_mode)下，情况会有不同吗？我们来看代码：
 
 ```javascript
@@ -98,7 +104,7 @@ var obj1 = {
 obj1.obj2.foo(); // 42
 ```
 
-`警惕隐式绑定变为默认绑定`。由于 bar 是对 foo 函数的另外一个引用，所以在调用 bar()时,相当于直接调用 foo()，调用点是 global。
+**警惕隐式绑定丢失，变为默认绑定**。由于 bar 是对 foo 函数的另外一个引用，所以在调用 bar()时,相当于直接调用 foo()，调用点是 global。
 
 ```javascript
 function foo() {
@@ -118,7 +124,7 @@ bar(); // "oops, global"
 obj.foo; //2
 ```
 
-更典型的应用是在回调上使用
+更典型的是发生在回调上：
 
 ```javascript
 function foo() {
@@ -144,9 +150,9 @@ function setTimeout(fn, delay) {
 
 相当于将 obj.foo 赋值给 fn，然后执行 fn()。fn 相当于另外一个对 foo 函数的引用。所以 this 指向了 global。
 
-### 显式绑定 call 和 apply 或 bind
+### 显式绑定 （call 和 apply ）或 bind
 
-在 JavaScript 中，所有的函数都可以调用  `call`  和  `apply`  来显式的绑定  `this`。
+在 JavaScript 中，所有的函数都可以调用  `call`  和  `apply`  来显式的绑定  `this`。`call(..)` 和`apply(..)`的第一个参数就是给`this`准备的。
 
 **注意**：call 和 apply 是直接执行函数，bind 是返回一个新的函数。
 
@@ -162,6 +168,8 @@ foo.call(obj); // 2
 
 上面这段代码显式的把  `foo`  函数的  `this`  绑定到  `obj`  对象上。
 
+#### 硬绑定
+
 ```javascript
 function foo(something) {
   console.log(this.a, something);
@@ -171,13 +179,13 @@ var obj = {
   a: 2
 };
 var bar = function() {
-  return foo.apply(obj, arguments);
+  return foo.apply(obj, arguments); // 硬绑定，每次调用 bar 函数都会手动在 obj 上调用 foo 函数
 };
 var b = bar(3); // 2 3
 console.log(b); // 5
 ```
 
-事实上，你也经常会在实际代码中见到这样的一个方法：
+另一种写法是：
 
 ```javascript
 function foo(something) {
@@ -187,7 +195,7 @@ function foo(something) {
 // simple `bind` helper
 function bind(fn, obj) {
   return function() {
-    return fn.apply(obj, arguments);
+    return fn.apply(obj, arguments); // 利用高阶函数，返回一个新的函数
   };
 }
 var obj = {
@@ -215,7 +223,7 @@ console.log(b); // 5
 
 `bind()`返回了一个新的函数，这个函数的  `this`  被强制绑定到我们指定的任意对象上，这里是  `obj`。
 
-一些常用的 API 内置了显示绑定，如：
+一些常用的 API 内置了显式绑定，如：
 
 ```javascript
 function foo(el) {
@@ -225,12 +233,12 @@ var obj = {
   id: "awesome"
 };
 // use `obj` as `this` for `foo(..)` calls
-[1, 2, 3].forEach(foo, obj); // 1 awesome  2 awesome  3 awesome
+[1, 2, 3].forEach(foo, obj); // 1 awesome  2 awesome  3 awesome 最后一个参数表示this的值是 obj
 ```
 
 ### new 绑定
 
-JavaScript 中的任意函数，如果在调用的时候，前面  `new`  关键字，那么如下的几件事情会依次发生：
+JavaScript 中的任意函数，如果在调用的时候，前面加  `new`  关键字，那么如下的几件事情会依次发生：
 
 1. 新对象被创建；
 2. 新创建的对象被加入到  `prototype`  链中,即新对象的`__propto__`指向函数的 `prototype`；
@@ -245,6 +253,7 @@ function foo(a) {
 }
 var bar = new foo(2);
 console.log(bar.a); // 2
+bar.__proto__ === foo.prototype; // true
 ```
 
 `new foo(...)`  把新创建的对象绑定为  `this`，这也就是  `new`  绑定。
