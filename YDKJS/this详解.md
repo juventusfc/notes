@@ -1,4 +1,4 @@
-# This详解
+# This 详解
 
 ## 主要知识点
 
@@ -8,8 +8,8 @@ this 实际上是在函数被调用时发生的绑定，指向什么完全取决
 
 ## call-site 调用位置
 
-* call-site: 方法在哪里被真正调用，不是在哪里被声明—-**跟 this 关系很大。决定了 this 的值**
-* call-stack: 方法执行时的执行栈。
+- call-site: 方法在哪里被真正调用，不是在哪里被声明—-**跟 this 关系很大。决定了 this 的值**
+- call-stack: 方法执行时的执行栈。
 
 通常，call-site 在执行栈之前。
 
@@ -32,7 +32,7 @@ function foo() {
 baz(); // <-- `baz` 的调用点
 ```
 
-我们可以使用浏览器的开发者工具进行查看调用位置。下图中，执行栈是 foo，调用位置是foo下面的bar。
+我们可以使用浏览器的开发者工具进行查看调用位置。下图中，执行栈是 foo，调用位置是 foo 下面的 bar。
 
 ![callSite](./images/callSite.png)
 
@@ -46,13 +46,13 @@ baz(); // <-- `baz` 的调用点
 
 ```javascript
 function foo() {
-  console.log( this.a );
+  console.log(this.a);
 }
 var a = 2;
 foo(); // 2
 ```
 
-在上面这段代码中，函数的调用点是全局作用域，那么默认绑定会生效，`this`  指向全局对象。  
+在上面这段代码中，函数的调用点是全局作用域，那么默认绑定会生效，`this`  指向全局对象。
 
 如果函数运行在[strict mode](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Strict_mode)下，情况会有不同吗？我们来看代码：
 
@@ -277,24 +277,24 @@ class A {
 
 ### 优先级
 
-* 函数被  `new`  关键字调用了吗？如果是，那么  `this`  就是新创建的对象。
+- 函数被  `new`  关键字调用了吗？如果是，那么  `this`  就是新创建的对象。
 
   > var bar = new foo()
 
-* 函数通过  `apply`  或  `call`  或  `bind`  显式绑定了吗？如果是，`this`  指向显式指定的对象。
+- 函数通过  `apply`  或  `call`  或  `bind`  显式绑定了吗？如果是，`this`  指向显式指定的对象。
 
   > var bar = foo.call( obj2 )
 
-* 函数通过隐式绑定调用了吗？如果是那么就是隐式调用的对象。
+- 函数通过隐式绑定调用了吗？如果是那么就是隐式调用的对象。
 
   > var bar = obj1.foo()
 
-* 如果以上都不是，那么就是默认绑定，`this`  指向全局变量或者  `undefined` (strict mode 下)。
+- 如果以上都不是，那么就是默认绑定，`this`  指向全局变量或者  `undefined` (strict mode 下)。
   > foo()
 
 ## 箭头函数绑定
 
-**arrow function** 是ES6 的新特性，this 由调用点决定。  
+**arrow function** 是 ES6 的新特性，this 由最外层函数的调用点决定。 箭头函数的`this`绑定到最外层函数的调用点。
 
 如下所示，箭头函数定义在 foo 函数中。当执行 foo 时，foo 被绑定到了 obj 上，那么，此时箭头函数中的 this 也被绑定到了 obj 上。
 
@@ -302,18 +302,29 @@ class A {
 // ES6 using arrow function
 function foo() {
   setTimeout(() => {
-    console.log(this.a);
+    // 1. 当执行foo时，this指向obj对象
+    // 2. 当回调函数为箭头函数，this一直指向obj对象
+    console.log(this.a); // 2
   }, 100);
 }
+
+/*
+function foo() {
+  setTimeout(function () { // 1. 当执行foo时，this指向obj对象
+                           // 2. 当回调函数为普通函数，this指向调用时的对象，即Window对象
+    console.log(this.a); // undefined
+  }, 100);
+}
+*/
 
 var obj = {
   a: 2
 };
 
-foo.call(obj); // 2
+foo.call(obj); // 箭头函数为2；普通函数为undefined
 ```
 
-等价于
+箭头函数等价于
 
 ```javascript
 // ES5
@@ -339,11 +350,10 @@ function foo() {
   }, 100);
 }
 var a = 100; //outer
-foo() // 100 Value is is outer value。当执行 foo() 时
+foo(); // 100。
+// Value is is outer value。当执行 foo() 时
 // 1. 执行 foo 中的 `var a = 10`;
-// 2. 执行 setTimeout();
-// 3. 等待 1000ms 后，执行箭头函数。
-//    a) 箭头函数的this绑定到定义函数时的Scope中，该Scope由调用点确定。
-//    b) 这里的调用点是全局，所以引用了全局的 a
+// 2. 此时，this指向Window
+// 3. 执行 setTimeout();
+// 4. 等待 100ms 后，执行箭头函数，箭头函数的this保持不变，还是指向Window。
 ```
-
