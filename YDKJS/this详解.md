@@ -279,18 +279,19 @@ class A {
 
 - 函数被  `new`  关键字调用了吗？如果是，那么  `this`  就是新创建的对象。
 
-  > var bar = new foo()
+  > `var bar = new foo()`
 
 - 函数通过  `apply`  或  `call`  或  `bind`  显式绑定了吗？如果是，`this`  指向显式指定的对象。
 
-  > var bar = foo.call( obj2 )
+  > `var bar = foo.call( obj2 )`
 
 - 函数通过隐式绑定调用了吗？如果是那么就是隐式调用的对象。
 
-  > var bar = obj1.foo()
+  > `var bar = obj1.foo()`
 
 - 如果以上都不是，那么就是默认绑定，`this`  指向全局变量或者  `undefined` (strict mode 下)。
-  > foo()
+
+  > `foo()`
 
 ## 箭头函数绑定
 
@@ -310,8 +311,9 @@ function foo() {
 
 /*
 function foo() {
-  setTimeout(function () { // 1. 当执行foo时，this指向obj对象
-                           // 2. 当回调函数为普通函数，this指向调用时的对象，即Window对象
+  setTimeout(function () { 
+    // 1. 当执行foo时，this指向obj对象
+    // 2. 当回调函数为普通函数，this指向调用时的对象，即Window对象
     console.log(this.a); // undefined
   }, 100);
 }
@@ -341,6 +343,8 @@ var obj = {
 
 foo.call(obj); // 2
 ```
+
+另一个例子：
 
 ```javascript
 function foo() {
