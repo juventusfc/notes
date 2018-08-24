@@ -494,7 +494,64 @@ a.myName(); // "a"
 b.myName(); // "b"
 ```
 
-## OO 风格和 OLOO 风格
+## 行为委托
+
+Java 主要是 OO 风格，Javascript 可以使用 OLOO 风格。
+
+### 委托理论
+
+委托理论不同于类理论。**委托行为意味着某些对象（XYZ）在找不到属性或方法时会把请求委托给另一个对象（Task）**
+
+```java
+// 类理论
+class Task {
+  id;
+
+  // constructor `Task()`
+  Task(ID) { id = ID; }
+  outputTask() { output( id ); }
+}
+
+class XYZ inherits Task {
+  label;
+
+  // constructor `XYZ()`
+  XYZ(ID,Label) { super( ID ); label = Label; }
+  outputTask() { super(); output( label ); }
+}
+
+class ABC inherits Task {
+  // ...
+}
+```
+
+```javascript
+// 委托理论
+var Task = {
+  setID: function(ID) {
+    this.id = ID;
+  },
+  outputID: function() {
+    console.log(this.id);
+  }
+};
+
+// make `XYZ` delegate to `Task`
+var XYZ = Object.create(Task);
+
+XYZ.prepareTask = function(ID, Label) {
+  this.setID(ID);
+  this.label = Label;
+};
+
+XYZ.outputTaskDetails = function() {
+  this.outputID();
+  console.log(this.label);
+};
+
+// ABC = Object.create( Task );
+// ABC ... = ...
+```
 
 ### OO 风格
 
@@ -522,7 +579,9 @@ b1.speak();
 b2.speak();
 ```
 
-### OLOO 风格 以对象作为关联
+### OLOO 风格
+
+以对象作为关联，逻辑更清晰，不需要构造函数/原型.prototype/new 等模仿类的行为。
 
 ![OLOO](./images/OLOO.png)
 
