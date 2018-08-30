@@ -50,3 +50,4 @@
 - [CommonJS 和 ES6 Modules](/Others/CommonJS和ES6Modules.md)
 - [Webpack4 使用指南](/Others/webpack4-guide.md)
 - [Git 使用技巧](/Others/Git使用技巧.md)
+- [敏捷技能修炼](/Others/敏捷技能修炼.md)
