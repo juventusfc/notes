@@ -51,3 +51,4 @@
 - [Webpack4 使用指南](/Others/webpack4-guide.md)
 - [Git 使用技巧](/Others/Git使用技巧.md)
 - [敏捷技能修炼](/Others/敏捷技能修炼.md)
+- [ECMAScript6 入门](/Others/ECMAScript6入门.md)
