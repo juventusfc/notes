@@ -143,3 +143,125 @@ var result = `Hello ${name}`; // 变量名写在${}中
 - 箭头函数
 
 ## Set 和 Map 数据结构
+
+### Set
+
+类似于数组，但是成员值是唯一的。
+
+```javascript
+var s = new Set();
+[1, 2, 4, 3, 1].map(x => s.add(x));
+for (i of s) {
+  console.log(i); // 1 2 4 3
+}
+```
+
+- `size`
+
+- `add()`
+
+- `delete(value)`
+
+- `has(value)`
+
+- `clear()`
+
+- Set 与 Array 相互转换
+
+  ```javascript
+  var set = new Set([1, 2, 3]); // {1,2,3}
+  var arr = Array.from(set); //[1,2,3]
+  ```
+
+### Map
+
+JavaScript 的对象本质上也是`key-value`键值对，但是只能用字符串当做 key。
+
+- `size`
+- `set(key, value)`
+- `get(key)`
+- `has(key)`
+- `delete(key)`
+- `clear()`
+- `keys()` 返回键名遍历器
+- `values()` 返回键值遍历器
+- `entries()` 返回所有键值对
+
+### WeakMap
+
+只接受对象作为 key 的特殊的 Map。专用场合是它的 key 所对应的对象，可能会在未来消失，当这个对象被回收后，WeakMap 自动移除对应的键值对。有助于防止内存泄漏。
+
+```javascript
+var m = new WeakMap();
+var a = { name: "frank" };
+m.set(a, "hello");
+m.get(a); // "hello"
+
+a = null;
+m.get(a); // undefined
+m.has(a); // false
+```
+
+## Iterator, Iterable 和 generator
+
+遍历器是一种协议，任何对象只要部署这个协议，就可以完成遍历操作。在 ES6 中，遍历操作特指`for...of`循环。
+
+### Iterator
+
+Iterator 是一个具有`next()`方法的对象，它存在的目的是为了改善遍历的体验。`next()`返回一个包含`value`和`done`属性的对象。
+
+```javascript
+function makeIterator(array) {
+  var nextIndex = 0;
+
+  return {
+    next: function() {
+      return nextIndex < array.length
+        ? {
+            value: array[nextIndex++],
+            done: false
+          }
+        : {
+            value: undefined,
+            done: true
+          };
+    }
+  };
+}
+var it = makeIterator(["a", "b"]); // it是一个Iterator
+it.next().value; // 'a'
+it.next().value; // 'b'
+```
+
+### Iterable 跟`for...of`有关
+
+Iterable 是一个具有 Symbol.iterator 属性的对象。这个属性是一个函数，返回一个 iterator。 在 ES6 中，所有的集合类对象(Arrays, Sets, and Maps) 和 strings 都是 iterable。
+
+Iterable 的存在是为了配合使用 ES6 的新遍历方式——`for...of`。
+
+它的执行原理是这样的：在使用`for...of`遍历 iterable 时，
+
+1. 会调用 iterable 内置的`Symbol.iterator`方法，产生一个 iterator
+2. 在每一轮遍历中，调用 iterator 的 next 方法，得到具体的值。这个遍历过程直到 next 返回的对象的`done`为 true。
+
+### Generator
+
+Generator 返回一个 Iterator。Generator 函数的`function`关键字和括号之间有一个`*`，用以区分 generator 和普通函数。
+
+```javascript
+function* createIterator() {
+  yield 3;
+  yield 2;
+  yield 1;
+}
+
+let iterator = createIterator(); // 返回Iterator
+iterator.next(); // {value: 3, done: false}
+iterator.next(); // {value: 2, done: false}
+iterator.next(); // {value: 1, done: false}
+iterator.next(); // {value: undefined, done: true}
+```
+
+## Promise
+
+请参考 YDKJS
