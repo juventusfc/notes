@@ -9,11 +9,7 @@
 - [YDKJS 笔记--Scope&Closure](/YDKJS/Scope-Closure.md)
 - [YDKJS 笔记--this 详解](/YDKJS/this详解.md)
 - [YDKJS 笔记--Object 详解](/YDKJS/Object详解.md)
-- [YDKJS 笔记--Async&Performance(一)](</YDKJS/YDKJS笔记--Async&Performance(一)/README.md>)
-- [YDKJS 笔记--Async&Performance(二)](</YDKJS/YDKJS笔记--Async&Performance(二)/README.md>)
-- [YDKJS 笔记--Async&Performance(三)](</YDKJS/YDKJS笔记--Async&Performance(三)/README.md>)
-- [YDKJS 笔记--Async&Performance(四)](</YDKJS/YDKJS笔记--Async&Performance(四)/README.md>)
-- [YDKJS 笔记--Async&Performance(五)](</YDKJS/YDKJS笔记--Async&Performance(五)/README.md>)
+- [YDKJS 笔记--Object 详解](/YDKJS/异步和性能.md)
 
 ## Functiona Program
 
