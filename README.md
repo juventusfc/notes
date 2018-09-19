@@ -9,7 +9,7 @@
 - [YDKJS 笔记--Scope&Closure](/YDKJS/Scope-Closure.md)
 - [YDKJS 笔记--this 详解](/YDKJS/this详解.md)
 - [YDKJS 笔记--Object 详解](/YDKJS/Object详解.md)
-- [YDKJS 笔记--Object 详解](/YDKJS/异步和性能.md)
+- [YDKJS 笔记--异步和性能](/YDKJS/异步和性能.md)
 
 ## Functiona Program
 
