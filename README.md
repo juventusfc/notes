@@ -2,7 +2,7 @@
 
 ## .NET(In Progress)
 
-- [C# Basic](/C#/C#-basic.md)
+- [C# Basic](/C-Sharp/C-Sharp-basic.md)
 
 ## CSS
 
