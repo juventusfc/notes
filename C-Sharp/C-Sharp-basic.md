@@ -46,7 +46,7 @@
 
 `.NET`主要包括`Common Language Runtime`和`Framework Class Library`。`ASP.NET`是基于`.NET`的一个开发 Web 应用的框架。
 
-![NET](images\NET.png)
+![NET](./images/NET.png)
 
 ## Types
 
