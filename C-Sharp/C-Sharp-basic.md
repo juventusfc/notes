@@ -354,3 +354,19 @@ public class CircularBuffer<T> // 类名后增加泛型标识
 // 2. 使用泛型类
 var buffer = new CircularBuffer<double>();
 ```
+
+## 集合
+
+| Name                           | Strengths                                         |
+| :----------------------------- | ------------------------------------------------- |
+| **Array**                      | Such as int[]                                     |
+| **List<T>**                    | A growing array                                   |
+| Queue<T>, Stack<T>             | For FIFO and LIFO                                 |
+| Hashset<T>                     | Unique items only                                 |
+| LinkedList<T>                  | Flexible inserts                                  |
+| **Dictionary<TKey, TValue>**   | Quick look up by key                              |
+| SortedSet<T>                   | Sorted & unique                                   |
+| SortedList<TKey, TValue>       | Sorted& memory efficient                          |
+| SortedDictionary<TKey, TValue> | Sorted, fast inserts and removals                 |
+| Concurrent Collections         | Multiple writers and readers                      |
+| ImmutableCollections           | Thread safe,modifications produce new collections |
