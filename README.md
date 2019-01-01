@@ -1,5 +1,9 @@
 # CONTENTS
 
+## 常用短笔记
+
+- [常用短笔记](/Notes/常用短笔记.md)
+
 ## .NET(In Progress)
 
 - [C# Basic](/C-Sharp/C-Sharp-basic.md)

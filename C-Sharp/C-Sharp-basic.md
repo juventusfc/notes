@@ -6,7 +6,7 @@
 
 1. `.Core`中： 新增`Task.cs` 作为 Entity
 2. `.EntityFramework`中： 修改`SimpleTaskAppDbContext.cs`，增加 DbSet
-3. `命令行`中：`Add-Migration` 和 `Update-Database` 更新数据库。报错需修改为 `Server=(localdb)\\mssqllocaldb`
+3. `命令行`中：`Add-Migration` 和 `Update-Database` 更新数据库。报错需修改为 `Server=(localdb)\mssqllocaldb`
 4. `.Application`中： 新增`TaskAppService.cs`(以及单元测试)/`输入DTO`/`输出DTO`
 5. `.Web`中：
    - 修改`SimpleTaskAppNavigationProvider.cs`,新增类目
