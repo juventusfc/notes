@@ -370,3 +370,12 @@ var buffer = new CircularBuffer<double>();
 | SortedDictionary<TKey, TValue> | Sorted, fast inserts and removals                 |
 | Concurrent Collections         | Multiple writers and readers                      |
 | ImmutableCollections           | Thread safe,modifications produce new collections |
+
+## null 相关
+
+```c#
+Nullable<int> i = null;
+int? i = null;
+
+int i = null; //error
+```
