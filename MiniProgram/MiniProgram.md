@@ -87,3 +87,63 @@ data: {
 hidden 和 if 都能达到隐藏的效果。hidden 有很大的初始化消耗，if 有很大的切换消耗。当应用场景是频繁的隐藏或显示，优先使用 hidden 方式。
 
 ### 模板引用
+
+```html
+<!-- 模板定义 -->
+<template name="tempItem">
+    <view>
+        <view>{{name}}</view>
+        <view>{{phone}}</view>
+        <view>{{address}}</view>
+    </view>
+</template>
+
+<!-- 模板使用 -->
+<template is="tempItem" data="{{...item}}"></template>
+```
+
+```json
+data: {
+    item: {
+        name: "frank",
+        phone: "452124151",
+        address: "hangzhou"
+    }
+}
+```
+
+#### import
+
+只引用另一个文件中的`tempalte定义`。
+
+```html
+<import src=""></import>
+```
+
+#### include
+
+应用另一个文件中的除了`tempalte定义`的所有内容
+
+```html
+<include src=""></include>
+```
+
+## WXSS
+
+### rpx
+
+可以根据屏幕宽度进行自适应。规定屏幕宽为 750rpx。如在 iPhone6 上，屏幕宽度为 375px，共有 750 个物理像素，则 750rpx = 375px = 750 物理像素，1rpx = 0.5px = 1 物理像素。
+
+### 样式
+
+- 外联样式
+
+  ```html
+  @import 'xx.wxss';
+  ```
+
+- 内联样式
+
+  ```html
+  <view style="xx"></view>
+  ```
