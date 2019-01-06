@@ -1,5 +1,9 @@
 # CONTENTS
 
+## 微信小程序
+
+- [微信小程序](/MiniProgram/MiniProgram.md)
+
 ## 常用短笔记
 
 - [常用短笔记](/Notes/常用短笔记.md)
