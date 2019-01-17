@@ -16,7 +16,7 @@ git config --global core.editor "'C:\Program Files (x86)\Notepad++\notepad++.exe
 
 ### 需求
 
-假如有3个commit(commitId1/commitId2/commitId3)，现在需要将后两个合并成一个commit
+假如有3个commit(commitId1/commitId2/commitId3)，现在需要将后两个合并成一个commit(commitId2')
 
 ### 步骤
 
