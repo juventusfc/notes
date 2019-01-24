@@ -325,3 +325,13 @@ Tab 切换对应的生命周期（以 A、B 页面为 Tabbar 页面，C 是从 A
   </view>
 </view>
 ```
+
+## 组件
+
+### 视图容器
+
+- view
+- scroll-view
+- swiper
+- movable-view
+- cover-view
