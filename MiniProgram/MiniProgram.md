@@ -176,7 +176,7 @@ WXS（WeiXin Script）是小程序的一套脚本语言，结合 `WXML`，可以
 
 ## MINA 框架
 
-![mina](C:\Users\frank.hu\Documents\notes\MiniProgram\mina.png)
+![mina](\mina.png)
 
 WXML 模板和 WXSS 样式工作在渲染层，JS 脚本工作在逻辑层。通过数据驱动方式，可以让状态和视图绑定在一起。
 
@@ -184,7 +184,7 @@ WXML 结构实际上等价于一棵 Dom 树，通过一个 JS 对象也可以来
 
 ## 生命周期
 
-![life](C:\Users\frank.hu\Documents\notes\MiniProgram\life.PNG)
+![life](\life.PNG)
 
 - 应用生命周期(`App({})`)
 
