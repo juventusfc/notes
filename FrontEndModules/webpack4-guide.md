@@ -182,7 +182,7 @@ options:
   ```
 
   生成的目录结构
-  ![目录结构](./outputpath.PNG)
+  ![目录结构](./images/outputpath.PNG)
 
 - publicPath （类似于`output.publicPath`）
 
@@ -197,7 +197,7 @@ options:
   ```
 
   生成的目录结构
-  ![目录结构](./publicpath.PNG)
+  ![目录结构](./images/publicpath.PNG)
 
 ### style-loader 和 css-loader
 

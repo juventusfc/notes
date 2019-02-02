@@ -1,10 +1,10 @@
-# CommonJS和ES6 Modules
+# CommonJS 和 ES6 Modules
 
 ## CommmonJS
 
 ### CommonJS 规范
 
-* 模块的导出
+- 模块的导出
   > module  
   > exports
   > 模块的唯一出口是 module.exports 对象。可用伪代码表示为：
@@ -36,7 +36,7 @@ exports = {
 return module.exports;
 ```
 
-* 模块的引用
+- 模块的引用
   > require
 
 ### 原理
@@ -82,9 +82,9 @@ mod.isNumber(); // 抛出错误
 
 ### 规范
 
-* 导出
+- 导出
   > export: 命令规定的是对外的接口，必须与模块内部的变量建立一一对应关系
-* 引用
+- 引用
   > import
 
 ### 例子

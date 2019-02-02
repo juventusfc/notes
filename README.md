@@ -1,14 +1,14 @@
 # CONTENTS
 
-## 微信小程序
-
-- [微信小程序](/MiniProgram/MiniProgram.md)
-
 ## 常用短笔记
 
 - [常用短笔记](/Notes/常用短笔记.md)
 
-## .NET(In Progress)
+## 微信小程序
+
+- [微信小程序](/MiniProgram/MiniProgram.md)
+
+## .NET
 
 - [C# Basic](/C-Sharp/C-Sharp-basic.md)
 
@@ -55,8 +55,11 @@
 ## Others
 
 - [软技能-代码之外的生存指南](/Others/软技能-代码之外的生存指南.md)
-- [CommonJS 和 ES6 Modules](/Others/CommonJS和ES6Modules.md)
-- [Webpack4 使用指南](/Others/webpack4-guide.md)
 - [Git 使用技巧](/Others/Git使用技巧.md)
 - [敏捷技能修炼](/Others/敏捷技能修炼.md)
 - [ECMAScript6 入门](/Others/ECMAScript6入门.md)
+
+## 前端模块化
+
+- [CommonJS 和 ES6 Modules](/FrontEndModules/CommonJS和ES6Modules.md)
+- [Webpack4 使用指南](/FrontEndModules/webpack4-guide.md)
