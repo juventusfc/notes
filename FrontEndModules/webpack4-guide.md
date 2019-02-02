@@ -10,13 +10,11 @@ webpack4 可以实现 0 配置，也可以结合配置文件使用。
 
 ## Entry
 
-Entry 指定了打包的起始点。默认值为`./src/index.js`。
+Entry 指定了打包的起始点。默认值为`./src/index.js`。对于单页应用，最好只有一个 entry。
 
-### 速记语法
+### 单入口语法
 
 `entry: string|Array<string>`
-
-#### 例子
 
 ```javscript
 module.exports = {
@@ -34,23 +32,15 @@ module.exports = {
 };
 ```
 
-注意，当传入数组时，表示多入口，但是数组中的各个入口文件会打成一个包。
+注意，当传入数组时，表示多入口，但是数组中的各个入口文件会打成一个包，数组中最后一个 entry 为主入口，前面的 entry 可以看成是最后一个 entry 的依赖。
 
-### 对象语法(推荐)
+### 多入口语法
 
 `entry: {[entryChunkName: string]: string|Array<string>}`
 
 ```javascript
-const config = {
-  entry: {
-    app: "./src/app.js",
-    vendors: "./src/vendors.js"
-  }
-};
-```
-
-```javascript
-const config = {
+// 多页应用指定多入口，生成多个dependency graph，输出多个文件
+module.exports = {
   entry: {
     pageOne: "./src/pageOne/index.js",
     pageTwo: "./src/pageTwo/index.js",
@@ -63,12 +53,13 @@ const config = {
 
 ## Output
 
+### 单入口
+
 Entry 指定了打包后文件的存放点。打包后的 main 文件的存放点默认值为`./dist/main.js`，其他非 main 文件为`./dist`。
 
 ```javscript
 const config = {
   output: {
-    path: path.resolve(__dirname, 'dist'),
     filename: 'my-first-webpack.bundle.js'
   }
 };
@@ -76,7 +67,7 @@ const config = {
 module.exports = config;
 ```
 
-当打包多入口文件时，
+### 多入口
 
 ```javascript
 {
@@ -93,8 +84,29 @@ module.exports = config;
 
 ### path 和 publicPath
 
-path 指定了 main.js 的生成路径。
-publicPath 指定了 main.js 中对 image 等文件的 uri 地址。对于一些静态资源，可能在本地是放在本地文件夹的，但是在生产环境上，静态资源可能在 CDN 上，如果对 main.js 中的每个 uri 都进行手动更改，容易出错和遗漏。引入 publicPath，就能统一对 uri 进行更改了。
+path  
+指定了 main.js 在哪里生成。**需要是绝对路径**。
+
+```javascript
+output: {
+  path: path.resolve(__dirname, "dist");
+}
+```
+
+```javascript
+path.resolve("/foo/bar", "./baz");
+// Returns: '/foo/bar/baz'
+
+path.resolve("/foo/bar", "/tmp/file/");
+// Returns: '/tmp/file'
+
+path.resolve("wwwroot", "static_files/png/", "../gif/image.gif");
+// If the current working directory is /home/myself/node,
+// this returns '/home/myself/node/wwwroot/static_files/gif/image.gif'
+```
+
+publicPath  
+指定了 main.js 中对 image 等文件的 uri 地址。对于一些静态资源，可能在本地是放在本地文件夹的，但是在生产环境上，静态资源可能在 CDN 上，如果对 main.js 中的每个 uri 都进行手动更改，容易出错和遗漏。引入 publicPath，就能统一对 uri 进行更改了。
 
 ## Loaders
 
@@ -138,6 +150,7 @@ Loaders 用于 webpack 识别打包 js/json 文件之外的文件类型。原生
 ### file-loader
 
 The file-loader resolves import/require() on a file into a url and emits the file into the output directory.
+
 file-loader 将 js 中 import/require()引用的文件内容（image/css）生成到指定的目录，引用的 uri 会自动匹配，使打包后的 bundle 能正常访问文件。
 使用步骤：
 
@@ -244,7 +257,7 @@ webpack 打包所有文件后，用该 plugin 可以创建与 js 匹配 hash 值
 
 ## Mode
 
-模式包括：development, production(默认值) 和 none
+webpack4 中模式包括：development, production(默认值) 和 none。每个模式有许多预设好的优化 plugin,如 uglify 等。
 
 ```javascript
 module.exports = {
