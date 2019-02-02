@@ -16,7 +16,7 @@
 
 - [Sass 入门](/CSS/Sass入门.md)
 
-## YDKJS(连载中)
+## YDKJS
 
 - [YDKJS 笔记--Scope&Closure](/YDKJS/Scope-Closure.md)
 - [YDKJS 笔记--this 详解](/YDKJS/this详解.md)
@@ -34,11 +34,6 @@
 - [Functional-Light-JS 读书笔记(七)-常用的 FP 方法](/FP/常用的FP方法.md)
 - [Functional-Light-JS 读书笔记(八)-Observables](/FP/Observables.md)
 
-## Tools
-
-- [Google Tips](/Tools/google-tips.md)
-- [相对路径的简单解释](/Tools/URL.md)
-
 ## React
 
 - [React Router 入门](/React/react-router.md)
@@ -52,14 +47,16 @@
 - [Redux 学习笔记-05-中间件](/Redux/中间件.md)
 - [Redux 学习笔记-06-React + Redux + React Router](/Redux/React+Redux+ReactRouter.md)
 
+## 前端模块化
+
+- [CommonJS 和 ES6 Modules](/FrontEndModules/CommonJS和ES6Modules.md)
+- [Webpack4 使用指南](/FrontEndModules/webpack4-guide.md)
+
 ## Others
 
 - [软技能-代码之外的生存指南](/Others/软技能-代码之外的生存指南.md)
 - [Git 使用技巧](/Others/Git使用技巧.md)
 - [敏捷技能修炼](/Others/敏捷技能修炼.md)
 - [ECMAScript6 入门](/Others/ECMAScript6入门.md)
-
-## 前端模块化
-
-- [CommonJS 和 ES6 Modules](/FrontEndModules/CommonJS和ES6Modules.md)
-- [Webpack4 使用指南](/FrontEndModules/webpack4-guide.md)
+- [Google Tips](/Tools/google-tips.md)
+- [相对路径的简单解释](/Tools/URL.md)
