@@ -106,21 +106,6 @@ Loaders 用于 webpack 识别打包 js/json 文件之外的文件类型。原生
 
 这种语法了。
 
-1. 安装 loaders
-   > npm install --save-dev css-loader  
-   > npm install --save-dev ts-loader
-2. 使用 loaders
-   > ```javascript
-   > module.exports = {
-   >   module: {
-   >     rules: [
-   >       { test: /\.css$/, use: "css-loader" },
-   >       { test: /\.ts$/, use: "ts-loader" }
-   >     ]
-   >   }
-   > };
-   > ```
-
 ### babel-loader
 
 使用 Babel 生成 es5 标准的 js 代码
@@ -153,7 +138,7 @@ Loaders 用于 webpack 识别打包 js/json 文件之外的文件类型。原生
 ### file-loader
 
 The file-loader resolves import/require() on a file into a url and emits the file into the output directory.
-file-loader 将 import/require()引用的文件内容（image/css）生成到指定的目录，引用的 uri 会自动匹配，使打包后的 bundle 能正常访问文件。
+file-loader 将 js 中 import/require()引用的文件内容（image/css）生成到指定的目录，引用的 uri 会自动匹配，使打包后的 bundle 能正常访问文件。
 使用步骤：
 
 1. 安装包依赖
@@ -162,7 +147,7 @@ file-loader 将 import/require()引用的文件内容（image/css）生成到指
    npm install file-loader --save-dev
    ```
 
-2. 文件中引用
+2. js 文件中引用
 
    ```javascript
    import img from "./file.png";
@@ -184,7 +169,9 @@ file-loader 将 import/require()引用的文件内容（image/css）生成到指
 
 options:
 
-- outputPath 生成 main.js 时，1. 引用的其他文件会放到这个相对路径下，2. main.js 能正常访问到该路径。注意，outputPath 应该为 main.js 的**相对路径**。也就是说，这个 option 在修改生成的 main.js 同时，会对对图片等文件的生成目录做控制。
+- outputPath（类似于`output.path`）
+
+  生成 main.js 时，1. 引用的其他文件会放到这个相对路径下，2. main.js 能正常访问到该路径。注意，outputPath 应该为 main.js 的**相对路径**。也就是说，这个 option 在修改生成的 main.js 同时，会对对图片等文件的生成目录做控制。
 
   ```javascript
   // index.js
@@ -197,7 +184,9 @@ options:
   生成的目录结构
   ![目录结构](./outputpath.png)
 
-- publicPath 生成 main.js 时，1. main.js 中引用其他文件时会增加这个路径前缀,2. 不保证这个路径下有这个文件。也就是说，这个 option 只修改生成的 main.js，对图片等文件的生成目录不做控制。
+- publicPath （类似于`output.publicPath`）
+
+  生成 main.js 时，1. main.js 中引用其他文件时会增加这个路径前缀,2. 不保证这个路径下有这个文件。也就是说，这个 option 只修改生成的 main.js，对图片等文件的生成目录不做控制。
 
   ```javascript
   // index.js
