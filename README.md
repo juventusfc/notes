@@ -58,5 +58,5 @@
 - [Git 使用技巧](/Others/Git使用技巧.md)
 - [敏捷技能修炼](/Others/敏捷技能修炼.md)
 - [ECMAScript6 入门](/Others/ECMAScript6入门.md)
-- [Google Tips](/Tools/google-tips.md)
-- [相对路径的简单解释](/Tools/URL.md)
+- [Google Tips](/Others/google-tips.md)
+- [相对路径的简单解释](/Others/URL.md)
