@@ -110,7 +110,7 @@ publicPath
 
 ## Loaders
 
-Loaders 用于 webpack 识别打包 js/json 文件之外的文件类型。原生 js 是无法直接 require/import 图片的，使用 loader 就能使用
+Loaders 用于 webpack 识别打包 js/json 文件之外的文件类型,类似于其他构建工具中的 Task。原生 js 是无法直接 require/import 图片的，使用 loader 就能使用
 
 ```javascript
 <img src={require("../../assets/logo.png")} />
@@ -229,7 +229,7 @@ main.js 中生成 css
    ```javascript
    {
      test: /\.css$/,
-     use: [{ loader: "style-loader" }, { loader: "css-loader" }]
+     use: [{ loader: "style-loader" }, { loader: "css-loader" }] // 先执行css-loader，之后执行style-loader
    }
    ```
 
