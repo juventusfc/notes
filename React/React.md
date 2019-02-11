@@ -1,6 +1,6 @@
 # React
 
-## 受控组件 VS 非受控组件
+## 受控组件（推荐使用） VS 非受控组件
 
 ```javascript
 // 受控组件通过setState来控制组件状态
@@ -64,3 +64,18 @@ class NameForm extends React.Component {
   }
 }
 ```
+
+## JSX
+
+JSX 不是模板语言，而是一种语法糖,能通过 javascript 改变 DOM。
+
+```javascript
+const element = <h1>Hello, {name}</h1>;
+
+// 等价于
+const element = React.createElement("h1", null, "Hello ", name);
+```
+
+## 生命周期
+
+![life-cycle](./images/react-lifecycle.PNG)
