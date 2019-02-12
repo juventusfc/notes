@@ -79,3 +79,45 @@ const element = React.createElement("h1", null, "Hello ", name);
 ## 生命周期
 
 ![life-cycle](./images/react-lifecycle.PNG)
+
+## HOC
+
+HOC 是包裹另一个 React 组件的 React 组件。[在线 DEMO](https://codesandbox.io/s/84296x60y0)
+
+```javascript
+hocFactory:: WrappedComponent: React.Component => EnhancedComponent: React.Component
+```
+
+### Props Proxy
+
+整合 WrappedComponent 需要的 props。
+
+```javascript
+function ppHOC(WrappedComponent) {
+  return class PP extends React.Component {
+    render() {
+      return <WrappedComponent {...this.props} />; // 这里的this指向PP实例
+    }
+  };
+}
+```
+
+如果需要访问 WrappedComponent 实例，需要使用 refs
+
+### Inheritance Inversion
+
+HOC 类（Enhancer）继承了 WrappedComponent。可以通过调用`super.xxMethod()`来获得 WrappedComponent 的信息。
+
+```javascript
+function iiHOC(WrappedComponent) {
+  return class Enhancer extends WrappedComponent {
+    render() {
+      return super.render();
+    }
+  };
+}
+```
+
+## TODO
+
+1. https://reactjs.org/blog/2015/12/18/react-components-elements-and-instances.html
