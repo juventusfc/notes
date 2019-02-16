@@ -118,6 +118,97 @@ function iiHOC(WrappedComponent) {
 }
 ```
 
+## 函数作为子组件
+
+```javascript
+// 创建
+class MyComponent extends React.Component {
+  render() {
+    return <div>{this.props.children("Scuba Steve")}</div>;
+  }
+}
+MyComponent.propTypes = {
+  children: React.PropTypes.func.isRequired
+};
+
+// 函数作为自组件使用
+<MyComponent>{name => <div>{name}</div>}</MyComponent>;
+```
+
+## Context API
+
+```javascript
+import React from "react";
+
+const enStrings = {
+  submit: "Submit",
+  cancel: "Cancel"
+};
+
+const cnStrings = {
+  submit: "提交",
+  cancel: "取消"
+};
+const LocaleContext = React.createContext(enStrings); // 1. 定义Context
+
+class LocaleProvider extends React.Component {
+  state = { locale: cnStrings };
+  toggleLocale = () => {
+    const locale = this.state.locale === enStrings ? cnStrings : enStrings;
+    this.setState({ locale });
+  };
+  render() {
+    return (
+      // 2. 提供Context值
+      <LocaleContext.Provider value={this.state.locale}>
+        <button onClick={this.toggleLocale}>切换语言</button>
+        {this.props.children}
+      </LocaleContext.Provider>
+    );
+  }
+}
+
+class LocaledButtons extends React.Component {
+  render() {
+    return (
+      // 3. 消费Context
+      <LocaleContext.Consumer>
+        {locale => (
+          <div>
+            <button>{locale.cancel}</button>
+            &nbsp;
+            <button>{locale.submit}</button>
+          </div>
+        )}
+      </LocaleContext.Consumer>
+    );
+  }
+}
+
+export default () => (
+  <div>
+    <LocaleProvider>
+      <div>
+        <br />
+        <LocaledButtons />
+      </div>
+    </LocaleProvider>
+    <LocaledButtons />
+  </div>
+);
+```
+
+## 脚手架
+
+- Create-React-App:Facebook 自己出的，是学习 React 比较好用的 CLI，但是没有集成 Redux/React-Router
+- Codesandbox：在线的一款快速构建 React 应用
+- Rekit：一款在 CRA 基础上增加了 Redux 等功能的 CLI
+- React-Starter-kit：比较老的一款脚手架
+
+## 打包和部署
+
+使用 Webpack
+
 ## TODO
 
 1. https://reactjs.org/blog/2015/12/18/react-components-elements-and-instances.html
