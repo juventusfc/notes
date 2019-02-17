@@ -209,6 +209,18 @@ export default () => (
 
 使用 Webpack
 
+## Redux
+
+Redux 相当于给应用中的所有 React Component 增加了一个全局的控制机制，用户通过这个机制控制 Redux Store State，所有 React Component 根据 Redux Store State 来组成虚拟 DOM，用以生成 DOM
+
+### combineReducers
+
+生成 Store 时，需要给定 Reducer。当有多个 Reducer 时，使用 combineReducers 组成一个包括所有 Reducers 的 Reducer。初始化生成的 Store State 包含所有 Reducers 中定义的 initial state。
+
+### bindActionCreators
+
+ActionCreator 用以生成 Action，Action 生成后还需要 dispatch 出去才能使 Redux 更新 State。bindActionCreators 能简化这个步骤，当执行 bind 后的方法，会直接 dispatch 出去 Action
+
 ## TODO
 
 1. https://reactjs.org/blog/2015/12/18/react-components-elements-and-instances.html
