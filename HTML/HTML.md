@@ -1,6 +1,8 @@
 # HTML
 
-## Meta
+## 元素
+
+### Meta
 
 Meta 提供 HTML 的辅助型信息。一般在`<head></head>`中。
 
@@ -29,7 +31,7 @@ Meta 提供 HTML 的辅助型信息。一般在`<head></head>`中。
 [参考 1](https://www.w3schools.com/tags/tag_meta.asp)
 [参考 2](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta)
 
-## 语义类标签
+### 语义类标签
 
 语义类标签有语义，能描述标签的用途。如`<p></p>`表示 paragraph，但是`<span></span>`等没有，就不是语义类标签。当然，不使用语义类标签，只靠`<div></div>`和`<span></span>`，是以前的很多项目采用的方式。两种方式各有优缺。
 Pros：
@@ -41,7 +43,7 @@ Cons：
 
 - 开发人员对语义类标签理解不一致会导致 HTML 结构更混乱。
 
-### 作为自然语言延伸的语义类标签
+#### 作为自然语言延伸的语义类标签
 
 ```html
 <ruby>
@@ -49,7 +51,7 @@ Cons：
 </ruby>
 ```
 
-### 作为标题摘要的语义类标签
+#### 作为标题摘要的语义类标签
 
 ```html
 <!-- 使用 hgroup 来确定副标题 -->
@@ -74,7 +76,7 @@ Cons：
 </section>
 ```
 
-### 作为整体结构的语义类标签
+#### 作为整体结构的语义类标签
 
 ```html
 <body>
@@ -119,7 +121,7 @@ Cons：
 </body>
 ```
 
-### HTML5 中新增的语义类标签
+#### HTML5 中新增的语义类标签
 
 | Tag                                                             | Description                                                                                 |
 | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
@@ -137,7 +139,7 @@ Cons：
 | [summary](https://www.w3schools.com/tags/tag_summary.asp)       | Defines a visible heading for a `<details>` element                                         |
 | [time](https://www.w3schools.com/tags/tag_time.asp)             | Defines a date/time                                                                         |
 
-## 链接
+### 链接
 
 - `<a></a>`
 - `<link></link>`
@@ -162,3 +164,19 @@ Cons：
     </ol>
   </nav>
   ```
+
+### 替换型元素
+
+### 表单
+
+### 表格
+
+### 总集
+
+## 语言
+
+### 实体
+
+### 命名空间
+
+## 补充标准

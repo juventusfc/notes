@@ -4,6 +4,10 @@
 
 - [HTML](/HTML/HTML.md)
 
+## JavaScript
+
+- [JavaScript](/JavaScript/JavaScript.md)
+
 ## 常用短笔记
 
 - [常用短笔记](/Notes/常用短笔记.md)
