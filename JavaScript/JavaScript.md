@@ -239,6 +239,19 @@ let d = new Dog("Mitzie");
 d.speak(); // Mitzie barks.
 ```
 
+##### 宿主对象
+
+JavaScript 宿主提供的对象。如浏览器的 window，node 的 global。
+
+##### 内置对象
+
+JavaScript 语言提供的对象。
+
+- 固有对象-由标准规定，随着 JavaScript 运行而自动创建的对象
+- 原生对象-内置构造器可以创建的对象，如 Array 等。注意，这些对象无法被继承。
+  ![built-in-object.png](./images/built-in-object.png)
+- 普通对象-由{}语法、Object 构造器或者 class 关键字定义类创建的对象，它能够被原型继承
+
 ### 算法
 
 #### 事件循环
