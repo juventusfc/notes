@@ -175,7 +175,7 @@ JavaScript 实现面向对象的方式是使用原型。
 
 原型系统的原理：
 
-- 如果所有对象都有私有字段 [[prototype]]，就是对象的原型；
+- 如果所有对象都有私有字段 [[\_\_proto\_\_]]，就是对象的原型；
 - 读一个属性，如果对象本身没有，则会继续访问对象的原型，直到原型为空或者找到为止。
 
 操纵原型的方法：
@@ -186,7 +186,10 @@ JavaScript 实现面向对象的方式是使用原型。
 
 ###### [[prototype]] VS \_\_proto\_\_
 
+![prototype-proto](./images/prototype-proto.png)
+
 \_\_proto\_\_ is the actual object that is used in the lookup chain to resolve methods, etc. [[prototype]] is the object that is used to build \_\_proto\_\_ when you create an object with new。[[prototype]]是对象的私有字段。
+可以简单得理解为,Foo.[[prototype]]是原型对象，\_\_proto\_\_指向原型对象。
 
 ###### new
 
@@ -201,13 +204,13 @@ Object.getPrototypeOf(a) === Foo.prototype; // true
 a.__proto__ == Foo.prototype; // true
 ```
 
-`new 构造器` 和 [[prototype]] 一起理解，new 主要用于新建一个对象，新对象的[[__proto__]]指向函数的[[prototype]]。当函数调用时前面加了 new，该函数成为构造器。
+`new 构造器` 和 [[prototype]] 一起理解，new 主要用于新建一个对象，新对象的[[\_\_proto\_\_]]指向函数的[[prototype]]。当函数调用时前面加了 new，该函数成为构造器。
 
-1. 以构造器的 prototype 属性为原型，创建新对象；
+1. 以构造器的 [[prototype]] 属性为原型，创建新对象；
 2. 将 this 和调用参数传给构造器，执行；
 3. 如果构造器返回的是对象，则返回，否则返回第一步创建的对象。
 
-##### ES6 class
+##### ES6 class 关键字
 
 ES6 来了之后，推荐使用 class 来构造类。
 
