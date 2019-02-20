@@ -199,6 +199,7 @@ function Foo() {
 }
 
 var a = new Foo();
+// var a = new Foo; // new后面可有可无()，最好使用有()的写法。
 
 Object.getPrototypeOf(a) === Foo.prototype; // true
 a.__proto__ == Foo.prototype; // true
@@ -207,8 +208,8 @@ a.__proto__ == Foo.prototype; // true
 `new 构造器` 和 [[prototype]] 一起理解，new 主要用于新建一个对象，新对象的[[\_\_proto\_\_]]指向函数的[[prototype]]。当函数调用时前面加了 new，该函数成为构造器。
 
 1. 以构造器的 [[prototype]] 属性为原型，创建新对象；
-2. 将 this 和调用参数传给构造器，执行；
-3. 如果构造器返回的是对象，则返回，否则返回第一步创建的对象。
+2. 以新对象为 this，将 this 和调用参数传给构造器，执行[[call]]；
+3. 如果构造器[[call]]返回的是对象，则返回该对象。否则返回第一步创建的对象(也就是 this)。
 
 ##### ES6 class 关键字
 
@@ -248,9 +249,27 @@ JavaScript 宿主提供的对象。如浏览器的 window，node 的 global。
 JavaScript 语言提供的对象。
 
 - 固有对象-由标准规定，随着 JavaScript 运行而自动创建的对象
-- 原生对象-内置构造器可以创建的对象，如 Array 等。注意，这些对象无法被继承。
+- 原生对象-内置构造器可以创建的对象，如 Array 等。
   ![built-in-object.png](./images/built-in-object.png)
+  这些构造器，可以使用 new 运算创建新的对象。注意，这些对象无法被继承。
+  函数对象的定义是具有 [[call]] 私有字段的对象。构造器对象的定义是具有私有字段 [[construct]] 的对象。我们可以这样说，任何对象只需要实现 [[call]]，它就是一个函数对象，可以去作为函数被调用。而如果它能实现 [[construct]]，它就是一个构造器对象，可以作为构造器被调用。用户用 function 关键词定义时，同时是函数对象和构造器对象。**ES6 之后，`()=>{}`箭头函数写法，只能作为函数对象，无法作为构造器对象。**
 - 普通对象-由{}语法、Object 构造器或者 class 关键字定义类创建的对象，它能够被原型继承
+
+##### 创建对象的方式
+
+- new: `var a = new Object();`
+- 字面量: `var a = {};`
+- function: `var o = function(){};`
+- DOM API: `var a = document.createElement('p');`
+- 内置对象 API：
+
+  ```javascript
+  var e = Object.create(null);
+  var f = Object.assign({ k1: 3, k2: 8 }, { k3: 9 });
+  var g = JSON.parse("{}");
+  ```
+
+- 装箱：`var a = Object(true);`
 
 ### 算法
 
