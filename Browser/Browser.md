@@ -40,13 +40,34 @@
 
 #### HTTP Head
 
-#### HTTP Request Body
+![request-header](./images/request-header.png)
 
-### 解析
+![response-header](./images/response-header.png)
 
-### 构建 DOM
+#### HTTP Body
+
+- Request Body: 只要服务器端认可就可以
+  - application/json
+  - application/x-www-form-urlencoded
+  - multipart/form-data
+  - text/xml
+- Response Body: 根据 Request Head 中的 Accept 等来决定 Response Body 类型
+
+### 解析和构建 DOM
+
+![parse](./images/parse.png)
+
+感性认识：Response Body 返回回来的 HTML 字符流经过状态机处理，形成 tokens。然后通过栈构建 DOM。
+
+![state-machine](./images/state-machine.png)
+
+由于字符流是逐步进入的，下一个进来的字符会决定前面字符的 token 类型，所以用状态机来创建 token。图中，红色的 data 是状态机的初始状态。
+
+[在线 DOM 构建器](https://software.hixie.ch/utilities/js/live-dom-viewer/)
 
 ### 计算 CSS
+
+CSS 计算把 CSS 规则应用到 DOM 上。由于 DOM 是渐进式的，CSS 规则保证选择器在构建当前 DOM 节点时，已经可以判断是否匹配，无需后续节点信息。
 
 ### 渲染/合成/绘制
 
