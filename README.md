@@ -13,8 +13,10 @@
 
 ### JavaScript
 
-- [JavaScript](/JavaScript/JavaScript.md)
-- [ECMAScript6 入门](/Others/ECMAScript6入门.md)
+- [文法](/JavaScript/文法.md)
+- [语义](/JavaScript/语义.md)
+- [运行时](/JavaScript/运行时.md)
+- [ECMAScript6 入门](/JavaScript/ECMAScript6入门.md)
 
 #### YDKJS
 
