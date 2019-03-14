@@ -1,4 +1,10 @@
-# AEM 开发
+# AEM develop
+
+## Install
+
+1. Copy& paste aem-install.jar and lisence to a folder, ex: `/AEM6.4/author/`
+2. Rename aem-instll to cq-author-p4502.jar. Author means instance name, p4502 means port
+3. Start author instance by double clicking cq-author-p4502.jar
 
 ## Eclipse 代码与 AEM 的同步
 
@@ -34,3 +40,16 @@ Eclipse 中，AEM 视图，
 3. 如果第二步生成的 css/js 不正确，[清理缓存(推荐方式)或重新生成(耗时较长，一般不推荐)](http://localhost:4502/libs/granite/ui/content/dumplibs.rebuild.html)
 4. 查看 aemfe 代理页面有没有更新 css。如果没有更新，`Ctrl + F5`强制刷新
 5. 查看真正的页面（被代理页面）。如果没有更新，`Ctrl + F5`强制刷新
+
+## 整体架构
+
+AEM 基于 Granite 构建，同时融入了 Sling 和 JCR 技术。
+
+![high-level](./images/high-level.png)
+
+![granite](./images/granite.png)
+Granite 包含很多基础模块。其中，OSGI 的实现采用了 Felix 项目。类似于.net 项目中的自带基础功能。
+
+Sling 是一种 web application framework。类似于.net 项目中的 MVC 框架，将请求的 URI 映射为 JCR 中的 node(也就是 Resource)。
+
+JCR 是一种内容数据库，用于存储数据。类似于.net 项目中的使用的 SQL Server。
