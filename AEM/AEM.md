@@ -50,6 +50,15 @@ AEM 基于 Granite 构建，同时融入了 Sling 和 JCR 技术。
 ![granite](./images/granite.png)
 Granite 包含很多基础模块。其中，OSGI 的实现采用了 Felix 项目。类似于.net 项目中的自带基础功能。
 
-Sling 是一种 web application framework。类似于.net 项目中的 MVC 框架，将请求的 URI 映射为 JCR 中的 node(也就是 Resource)。
+Sling 是一种 Web Application Framework。类似于.net 项目中的 MVC 框架，将请求的 URI 映射为 JCR 中的 node(也就是 Resource)。
 
 JCR 是一种内容数据库，用于存储数据。类似于.net 项目中的使用的 SQL Server。
+
+## 自带工具
+
+1. Web Console
+   用于查看 OSGI/Sling 等。一些 AEM 的基本配置也在这里配置。
+2. CRXDE Lite
+   用于编辑 JCR 节点上的内容。
+3. Packages
+   用于将 JCR 通过 vault 转换为 File System 形式。(TODO 需要学习 JCR 与 File System 的对应关系)
