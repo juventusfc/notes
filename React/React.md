@@ -221,6 +221,6 @@ Redux 相当于给应用中的所有 React Component 增加了一个全局的控
 
 ActionCreator 用以生成 Action，Action 生成后还需要 dispatch 出去才能使 Redux 更新 State。bindActionCreators 能简化这个步骤，当执行 bind 后的方法，会直接 dispatch 出去 Action
 
-## TODO
+## // TODO
 
 1. https://reactjs.org/blog/2015/12/18/react-components-elements-and-instances.html

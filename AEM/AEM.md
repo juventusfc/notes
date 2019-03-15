@@ -62,4 +62,111 @@ JCR 是一种内容数据库，用于存储数据。类似于.net 项目中的�
 2. CRXDE Lite
    用于编辑 JCR 节点上的内容。
 3. Packages
-   用于将 JCR 通过 vault 转换为 File System 形式。(TODO 需要学习 JCR 与 File System 的对应关系)
+   用于将 JCR 通过 vault 转换为 File System 形式。
+   // TODO 需要学习 JCR 与 File System 的[对应关系](http://jackrabbit.apache.org/filevault/vaultfs.html)
+
+PS:根据教程，在这里通过 Package 上传了 SamplePackage.zip
+
+## node 和 property
+
+node 决定了 JCR 的结构层次，property 决定了 node 的属性。
+
+node 有一个重要属性 jcr:primaryType。它决定了 node 的基本类型，常用的基本类型有 cq:Component 等。常用的类型可查询[官网](https://helpx.adobe.com/in/experience-manager/6-4/sites/developing/using/custom-nodetypes.html)。
+
+官网中的 definition 可参考[Node Type Annotation](http://jackrabbit.apache.org/jcr/node-type-notation.html)
+
+```json
+/*  An example node type definition */
+
+// The namespace declaration
+<ns = 'http://namespace.com/ns'>
+
+// Node type name
+[ns:NodeType]
+
+// Supertypes
+> ns:ParentType1, ns:ParentType2
+
+// This node type supports orderable child nodes
+orderable
+
+// This is a mixin node type
+mixin
+
+// Nodes of this node type have a property called 'ex:property' of type STRING
+- ex:property (string)
+
+// The default values for this
+// (multi-value) property are...
+= 'default1', 'default2'
+
+// This property is the primary item
+primary
+
+// and it is...
+mandatory autocreated protected
+
+// and multi-valued
+multiple
+
+// It has an on-parent-version setting of ...
+version
+
+// The constraint settings are...
+< 'constraint1', 'constraint2'
+
+// Nodes of this node type have a child node called ns:node which must be of
+// at least the node types ns:reqType1 and ns:reqType2
++ ns:node (ns:reqType1, ns:reqType2)
+
+// and the default primary node type of the child node is...
+= ns:defaultType
+
+// This child node is...
+mandatory autocreated protected
+
+// and supports same name siblings
+multiple
+
+// and has an on-parent-version setting of ...
+version
+```
+
+## 渲染过程
+
+PS: XX/ means XX folder
+
+1. Create folders
+   1. Create training/ under apps/
+   2. Create components/ and templates/ under training/
+   3. Create content/ and structure/ under components/
+2. Create a component
+   1. Right click components/, create component `contentpage`
+   2. Using a html as a default rendering script. The name of html file should be the same as component name
+3. Create a content node
+   1. Under content/, create node `hello-world`
+   2. Add `sling:resourceType = training/components/structure/contentpage` as a node property
+4. Render content
+   1. In browser, using `http://localhost:4502/content/hello-world.html` to render the component
+
+当在浏览器中输入 URL 时，`/content/hello-world.html`指向 JCR 中的`/content/hello-world`节点。在这个节点上，`sling:resourceType`指向`training/components/structure/contentpage`这个 component。然后就会渲染这个 component 的 render script，返回给浏览器。
+
+具体的步骤为：
+
+1. Decompose the URL
+
+   ![decompose-url](./images/decompose-url.png)
+
+2. Search for servlet or vanity URL redirect
+3. Search for a node indicated by the URL
+4. Resolve the resource
+
+   ![resolve-request](./images/resolve-request.png)
+
+5. Resolve the rendering script/servlet
+6. Create rendering chain
+7. Invoke rendering chain
+
+![url-rernder-all](./images/url-rernder-all.png)
+
+注意，图中的数字编号与上面描述不匹配。
