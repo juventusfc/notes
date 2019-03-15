@@ -186,3 +186,54 @@ Template 用于创建 Page。在创建 Template 的时候，会指定 Tempalte �
 
 1. 在 Page 上将需要的 Thumbnail 上传
 2. 在 CRXDE 中复制 Page/jcr:content/image 节点，将该节点粘贴至 templates/contactpage/jcr:content 节点下。
+
+## HTL
+
+HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML 给浏览器。类似于.net 项目中的 Razor Page(cshtml)。
+
+- Block Statements
+  `data-sly-*`
+- Expressions
+  `${}`
+
+```html
+  <!doctype html>
+  <html>
+    <head>
+        <meta charset="utf-8"/>
+    </head>
+    <body>
+        <h1>Hello World!!</h1>
+        <h3>Sling PropertiesObject</h3>
+        <!-- properties 指向当前 Resource -->
+        <p>Page Title : ${properties.jcr:title}</p>
+
+        <h3>Page Details</h3>
+        <!-- currentPage 是 Java 对象，真实的方法是 getXX()，实际调用时只需写 ${currentPage.XX} -->
+        <p>currentPage Title: ${currentPage.Title}</p>
+        <p>currentPage Name: ${currentPage.Name}</p>
+        <p>currentPage Path: ${currentPage.Path}</p>
+        <p>currentPage Depth: ${currentPage.Depth}</p>
+
+        <h3> Node Details </h3>
+        <p>currentNode Name: ${currentNode.Name}</p>
+        <p>currentNode Path: ${currentNode.Path}</p>
+        <p>currentNode Depth: ${currentNode.Depth}</p>
+    </body>
+  </html>
+```
+
+`data-sly-include`用于将另一部分内容包含在当前内容。
+
+```html
+<!-- contactpage.html -->
+<div data-sly-include="body.html"></div>
+
+<!-- body.html -->
+<div class="container we-Container--main"></div>
+
+<!-- 最后产生的页面 -->
+<div>
+    <div class="container we-Container--main"></div>
+</div>
+```
