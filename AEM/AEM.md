@@ -140,16 +140,16 @@ PS: XX/ means XX folder
    1. Create training/ under apps/
    2. Create components/ and templates/ under training/
    3. Create content/ and structure/ under components/
-2. Create a component
+2. Create a Component
    1. Right click components/, create component `contentpage`
    2. Using a html as a default rendering script. The name of html file should be the same as component name
 3. Create a content node
    1. Under content/, create node `hello-world`
    2. Add `sling:resourceType = training/components/structure/contentpage` as a node property
 4. Render content
-   1. In browser, using `http://localhost:4502/content/hello-world.html` to render the component
+   1. In browser, using `http://localhost:4502/content/hello-world.html` to render the Component
 
-当在浏览器中输入 URL 时，`/content/hello-world.html`指向 JCR 中的`/content/hello-world`节点。在这个节点上，`sling:resourceType`指向`training/components/structure/contentpage`这个 component。然后就会渲染这个 component 的 render script，返回给浏览器。
+当在浏览器中输入 URL 时，`/content/hello-world.html`指向 JCR 中的`/content/hello-world`节点。在这个节点上，`sling:resourceType`指向`training/components/structure/contentpage`这个 Component。然后就会渲染这个 Component 的 Render Script，返回给浏览器。
 
 具体的步骤为：
 
@@ -170,3 +170,19 @@ PS: XX/ means XX folder
 ![url-rernder-all](./images/url-rernder-all.png)
 
 注意，图中的数字编号与上面描述不匹配。
+
+## Template
+
+Template 用于创建 Page。在创建 Template 的时候，会指定 Tempalte 的`sling:resourceType`指向某个 Component。在创建 Page 时，会将 Template 的`sling:resourceType`属性复制给 Page(整个 Template 下的`jcr:content`节点都会被复制)，从而这个 Page 在 Render 的时候能找到对应 Component 的 Render Script(参考渲染过程)。
+
+### 限制使用 Template
+
+- 在 Template 层面，使用`allowedPaths`属性来限制使用
+- 在 Content 层面，使用`cq:allowedTemplates`属性来限制使用
+
+### 优化 Template
+
+以增加 Thumbnail 为例
+
+1. 在 Page 上将需要的 Thumbnail 上传
+2. 在 CRXDE 中复制 Page/jcr:content/image 节点，将该节点粘贴至 templates/contactpage/jcr:content 节点下。
