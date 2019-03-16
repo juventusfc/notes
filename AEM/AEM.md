@@ -237,3 +237,25 @@ HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML
     <div class="container we-Container--main"></div>
 </div>
 ```
+
+## 继承
+
+### 3 种层次关系
+
+- Resource Type 层次关系
+  通过 sling:resourceSuperType 属性来决定继承关系
+- Container 层次关系
+  主要用于给子 Component 配置，常用于 cq:editConfig 和 cq:childEditConfig 属性
+- Include 层次关系
+  主要用于运行时
+
+// TODO data-sly-resource 和 data-sly-include 的区别
+
+### 继承关系的解释
+
+当子类渲染时，通过 sling:resourceSuperType 关联至父类。渲染原则是**子类优先**。
+
+1. 当子类存在对应的 Init Script 时，执行子类的 Init Script
+   当子类的 Init Script 调用了父类和子类都有的 Script，优先调用子类的
+2. 当子类没有对应的 Init Script，执行父类的 Init Script
+   当父类的 Init Script 调用了父类和子类都有的 Script，优先调用子类的
