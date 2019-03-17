@@ -259,3 +259,8 @@ HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML
    当子类的 Init Script 调用了父类和子类都有的 Script，优先调用子类的
 2. 当子类没有对应的 Init Script，执行父类的 Init Script
    当父类的 Init Script 调用了父类和子类都有的 Script，优先调用子类的
+
+## ClientLib
+
+1. 定义 ClientLib，并定义 categories
+2. 在 Compoent 上使用`<sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html" data-sly-call="${clientLib.(js|css) @ categories='we.train.all'}"/>`来调用 js 或 css
