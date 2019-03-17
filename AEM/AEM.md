@@ -223,7 +223,9 @@ HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML
   </html>
 ```
 
-`data-sly-include`用于将另一部分内容包含在当前内容。
+### data-sly-include
+
+`data-sly-include`主要用于同一个组件内引用其他 html，用于将另一部分内容包含在当前内容。
 
 ```html
 <!-- contactpage.html -->
@@ -238,6 +240,32 @@ HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML
 </div>
 ```
 
+### data-sly-resource
+
+`data-sly-resource` 主要用于引用其他 Content Component
+
+```html
+<!-- header.html -->
+<!-- site-topnav 是一个 Component -->
+<div data-sly-resource="${'site-topnav' @ resourceType='training/components/structure/site-topnav'}"></div>
+```
+
+### data-sly-use
+
+`data-sly-use`用于使用 Java 或 JavaScript 来实现复杂逻辑。
+
+- Java
+
+  ```html
+  <div data-sly-use.topnav="TopNav" class="container we-Container--top-navbar"></div>
+  ```
+
+- JavaScript
+
+  ```html
+  <div data-sly-use.topnav="topNav.js" class="container we-Container--top-navbar"></div>
+  ```
+
 ## 继承
 
 ### 3 种层次关系
@@ -248,8 +276,6 @@ HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML
   主要用于给子 Component 配置，常用于 cq:editConfig 和 cq:childEditConfig 属性
 - Include 层次关系
   主要用于运行时
-
-// TODO data-sly-resource 和 data-sly-include 的区别
 
 ### 继承关系的解释
 
@@ -264,3 +290,23 @@ HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML
 
 1. 定义 ClientLib，并定义 categories
 2. 在 Compoent 上使用`<sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html" data-sly-call="${clientLib.(js|css) @ categories='we.train.all'}"/>`来调用 js 或 css
+
+## Logging
+
+1. Click Web Console--Sling--Log Support
+2. Add new Logger then Save
+3. Java/JavaScript
+
+   ```java
+   //Logger Object
+   private static final Logger LOGGER = LoggerFactory.getLogger(TopNav.class);
+   //Logger Message
+   LOGGER.info("########[JAVA] Root page is: " + rootPage.getTitle());
+   ```
+
+   ```javascript
+   //Logging Message
+   log.info("########[JS] Root page is: {}", root.getTitle());
+   ```
+
+4. Check logger under logs folder
