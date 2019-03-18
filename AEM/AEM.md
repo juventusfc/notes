@@ -310,3 +310,30 @@ HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML
    ```
 
 4. Check logger under logs folder
+
+## Dialog
+
+分为 Touch UI 和 Classic UI。Touch UI 基于 granite.js，所有可用在 Dialog 里的在`/libs/granite/ui/components`下，Dialog(cq:dialog) 的 sling:resourceType 是`cq/gui/components/authoring/dialog`。
+
+### cq:editConfig
+
+用于 inline 编辑模式
+
+## 增加 Dialog 后的渲染过程
+
+项目状态
+
+- `/content/train/en/about`页面的 sling:resourceType 为`training/components/structure/contentpage`
+- `/apps/training/components/structure/contentpage` contentpage Component 中的 Script 引用了 `<div class="we-Header" data-sly-resource="${'title' @ resourceType='training/components/structure/title'}"></div>`
+- `/apps/training/components/structure/title` title Component 中的 Dialog 中，指定了 title 的存储位置为`./jcr:title`
+
+`http://localhost:4502/editor.html/content/train/en/about.html` 渲染过程
+
+1. Author 在 About 页面配置 title Component 为`hello Title`
+   ![render-01](./images/render-01.png)
+2. 点击保存后，title Component 中的 Dialog 中，指定了 title 的存储位置为`./jcr:title`，所以在`/content/train/en/about/jcr:content`下新增 title 节点
+   ![render-02](./images/render-02.png)
+3. 页面重新加载，找到 contentpage Component，碰到`<div class="we-Header" data-sly-resource="${'title' @ resourceType='training/components/structure/title'}"></div>`
+4. 渲染 title Component，`<h1 data-sly-use.title="title.js">${title.text}</h1>`，在 title.js 中`title.text = properties.get(CONST.PROP_TITLE) || pageProperties.get(CONST.PROP_TITLE) || currentPage.name;`,properties 表示当前 resource，也就是`/content/train/en/about/jcr:content/title`,里面存的值是`hello Title`
+5. 页面最终效果
+   ![render-03](./images/render-03.png)
