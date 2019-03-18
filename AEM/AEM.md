@@ -63,7 +63,7 @@ JCR 是一种内容数据库，用于存储数据。类似于.net 项目中的�
    用于编辑 JCR 节点上的内容。
 3. Packages
    用于将 JCR 通过 vault 转换为 File System 形式。
-   // TODO 需要学习 JCR 与 File System 的[对应关系](http://jackrabbit.apache.org/filevault/vaultfs.html)
+   JCR 与 File System 的[对应关系](http://jackrabbit.apache.org/filevault/vaultfs.html)
 
 PS:根据教程，在这里通过 Package 上传了 SamplePackage.zip
 
@@ -313,13 +313,11 @@ HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML
 
 ## Dialog
 
+### cq:dialog
+
 分为 Touch UI 和 Classic UI。Touch UI 基于 granite.js，所有可用在 Dialog 里的在`/libs/granite/ui/components`下，Dialog(cq:dialog) 的 sling:resourceType 是`cq/gui/components/authoring/dialog`。
 
-### cq:editConfig
-
-用于 inline 编辑模式
-
-## 增加 Dialog 后的渲染过程
+#### 增加 cq:dialog 后的渲染过程
 
 项目状态
 
@@ -337,3 +335,17 @@ HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML
 4. 渲染 title Component，`<h1 data-sly-use.title="title.js">${title.text}</h1>`，在 title.js 中`title.text = properties.get(CONST.PROP_TITLE) || pageProperties.get(CONST.PROP_TITLE) || currentPage.name;`,properties 表示当前 resource，也就是`/content/train/en/about/jcr:content/title`,里面存的值是`hello Title`
 5. 页面最终效果
    ![render-03](./images/render-03.png)
+
+### cq:editConfig
+
+用于增强 dialog 的功能。
+
+### cq:design_dialog
+
+用于修改全局 content。`cq:design_dialog`来充当 dialog。`etc/designs`存放内容。在`design mode`下打开 dialog。
+
+### cq:dialog & cq:editConfig & cq:design_dialog
+
+- cq:dialog 用于当前 Component 级别的输入。只在当前页面起作用。
+- cq:editConfig 用于对 cq:dialog 的增强
+- cq:design_dialog 类似于 cq:dialog，但是是在 design mode 下打开，一般在根页面上配置目录，然后在某个页面的 Component 上在 design mode 下调样式或其他，会在全部页面上的对应 Component 上起作用
