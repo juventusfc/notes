@@ -18,6 +18,7 @@
    3. Add **Name** and modify **Port** to 59865
    4. Go to **Run**-> **Debug**-> **Choose your configuration**
    5. Set breakpoint to code and enjoy your debugging
+3. 当要修改代码并重新 debug 时，需要先将修改后的代码同步至 AEM
 
 ## Eclipse 代码与 AEM 的同步
 
