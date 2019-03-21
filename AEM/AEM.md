@@ -388,6 +388,11 @@ HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML
 
 ## Sling
 
+### 在 HTL 中增加 selectors
+
+1. 新增 Render Script
+2. `<form class="page__print" action="${currentPage.Path @ selectors='print'}.html"> <input value="Print Friendly" type="submit" /> </form>` 传入 selectors
+
 ## Internationalizatio
 
 ## Debug and Testing
