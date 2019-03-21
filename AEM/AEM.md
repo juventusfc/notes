@@ -368,7 +368,7 @@ HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML
 
 ### 1. 增加 responsivegrid
 
-1. 在需要 responsivegrid 的 Component 上增加
+1. 在需要 responsivegrid(layout container) 的 Component 上增加
    `<div data-sly-resource="${'responsivegrid' @ resourceType='wcm/foundation/components/responsivegrid'}"></div>`
 2. 点击右上角，切换到 design 模式
 3. 点击 responsivegrid 上的 parent
@@ -384,7 +384,7 @@ HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML
 
 在页面节点(jcr:content) 下新增`cq:responsive`节点
 
-// TODO parsys && iparsys && layout container(responsivegrid)对比
+// TODO parsys && iparsys && responsivegrid 对比
 
 ## Sling
 
