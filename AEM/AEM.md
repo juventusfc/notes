@@ -6,6 +6,19 @@
 2. Rename aem-instll to cq-author-p4502.jar. Author means instance name, p4502 means port
 3. Start author instance by double clicking cq-author-p4502.jar
 
+## IntelliJ 配置
+
+### Debug
+
+1. 命令行中启动 aem jar
+   `java -jar cq-author-p4502.jar -fork -forkargs -- -Xdebug -Xrunjdwp:transport=dt_socket,address=59865,suspend=n,server=y -Xmx1520m -XX:MaxPermSize=512m -XX:-UseSplitVerifier`
+2. IntelliJ 中，
+   1. Go to **Run**->**Edit Configurations**
+   2. Click on **+** and choose **Remote**
+   3. Add **Name** and modify **Port** to 59865
+   4. Go to **Run**-> **Debug**-> **Choose your configuration**
+   5. Set breakpoint to code and enjoy your debugging
+
 ## Eclipse 代码与 AEM 的同步
 
 Eclipse 中，AEM 视图，
