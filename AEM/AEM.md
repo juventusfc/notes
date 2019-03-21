@@ -363,3 +363,33 @@ HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML
 - cq:dialog 用于当前 Component 级别的输入。只在当前页面起作用。
 - cq:editConfig 用于对 cq:dialog 的增强
 - cq:design_dialog 类似于 cq:dialog，但是是在 design mode 下打开，一般在根页面上配置目录，然后在某个页面的 Component 上在 design mode 下调样式或其他，会在全部页面上的对应 Component 上起作用
+
+## Response Grid
+
+### 1. 增加 responsivegrid
+
+1. 在需要 responsivegrid 的 Component 上增加
+   `<div data-sly-resource="${'responsivegrid' @ resourceType='wcm/foundation/components/responsivegrid'}"></div>`
+2. 点击右上角，切换到 design 模式
+3. 点击 responsivegrid 上的 parent
+4. 点击 responsivegrid 上的 configure
+5. 选择可以添加到 responsivegrid 的 component
+6. 点击右上角，切换回 edit 模式
+
+### 2. 编辑页面增加 Emulator
+
+在页面节点(jcr:content) 上配置属性`cq:deviceGroups="/etc/mobile/groups/responsive"`
+
+### 3. 允许页面 responsive，在页面右上角出现 layout 模式
+
+在页面节点(jcr:content) 下新增`cq:responsive`节点
+
+// TODO parsys && iparsys && layout container(responsivegrid)对比
+
+## Sling
+
+## Internationalizatio
+
+## Debug and Testing
+
+## Brackets
