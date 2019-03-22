@@ -393,6 +393,80 @@ HTL 是一种模板语言。在服务器端，通过解析 HTL 然后返回 HTML
 1. 新增 Render Script
 2. `<form class="page__print" action="${currentPage.Path @ selectors='print'}.html"> <input value="Print Friendly" type="submit" /> </form>` 传入 selectors
 
+### Sling Resource Merger
+
+Sling Resource Merger 用于 AEM 的覆盖和继承。
+
+- overlay
+  复制 lib/下的 Component 到 apps/下。由于 AEM 自带的 search path 会先从 apps/寻找，apps/下的 Component 会先起作用。AEM6.0 之后，Sling Resource Merger 在 overlay 上起作用，不需要 1：1 复制 lib/下某个 Component 的所有节点和属性。
+
+  ```bash
+  /libs/sling/example (nt:folder)
+     +-- sling:resourceType = "some/resource/type"
+     +-- child1 (nt:folder)
+     |   +-- property1 = "property from /libs/sling/example/child1"
+     +-- child2 (nt:folder)
+     |   +-- property1 = "property from /libs/sling/example/child2"
+     +-- child3 (nt:folder)
+     |   +-- property1 = "property from /libs/sling/example/child3"
+
+  /apps/sling/example (sling:Folder)
+     +-- property1 = "property added in apps"
+     +-- child1 (nt:folder)
+     |   +-- sling:hideResource = true // 隐藏！
+     +-- child2 (nt:folder)
+     |   +-- property1 = "property from /apps/sling/example/child2"
+     +-- child3 (nt:folder)
+     |   +-- property2 = "property from /apps/sling/example/child3"
+
+  /mnt/overlay/sling/example (sling:Folder)
+     +-- sling:resourceType = "some/resource/type"
+     +-- property1 = "property added in apps"
+     +-- child2 (nt:folder)
+     |   +-- property1 = "property from /apps/sling/example/child2"
+     +-- child3 (nt:folder)
+     |   +-- property1 = "property from /libs/sling/example/child3"
+     |   +-- property2 = "property from /apps/sling/example/child3"
+  ```
+
+- override
+  通过使用`sling:resourceSuperType`属性来继承父类 Component。
+
+  ```bash
+  /apps/sling/base (nt:folder)
+     +-- child1 (nt:folder)
+     |   +-- property1 = "property from /libs/sling/example/child1"
+     +-- child2 (nt:folder)
+     |   +-- property1 = "property from /libs/sling/example/child2"
+     +-- child3 (nt:folder)
+     |   +-- property1 = "property from /libs/sling/example/child3"
+
+  /apps/sling/example (sling:Folder)
+     +-- sling:resourceSuperType = "/apps/sling/base"
+     +-- property1 = "property added in /apps/sling/example"
+     +-- child1 (nt:folder)
+     |   +-- sling:hideResource = true // 隐藏！
+     +-- child2 (nt:folder)
+     |   +-- property1 = "property from /apps/sling/example/child2"
+     +-- child3 (nt:folder)
+     |   +-- property2 = "property from /apps/sling/example/child3"
+
+  /mnt/override/apps/sling/example (sling:Folder)
+     +-- sling:resourceSuperType = "/apps/sling/base"
+     +-- property1 = "property added in /apps/sling/example"
+     +-- child2 (nt:folder)
+     |   +-- property1 = "property from /apps/sling/example/child2"
+     +-- child3 (nt:folder)
+     |   +-- property1 = "property from /libs/sling/example/child3"
+     |   +-- property2 = "property from /apps/sling/example/child3"
+  ```
+
+[参考文章](https://aemvardhan.wordpress.com/2017/02/22/understand-aem-sling-resource-merger-override-and-overlay-concepts/)
+
+### Redirect
+
+在页面下的 jcr:content 节点上新增`sling:redirectStatus`和`sling:redirect`和`redirectTarget`
+
 ## Internationalizatio
 
 ## Debug and Testing
