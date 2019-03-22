@@ -467,7 +467,14 @@ Sling Resource Merger 用于 AEM 的覆盖和继承。
 
 在页面下的 jcr:content 节点上新增`sling:redirectStatus`和`sling:redirect`和`redirectTarget`
 
-## Internationalizatio
+## Internationalization
+
+1. 新建一个 fr 的页面，该 fr 为识别符和路径
+2. 在 Component 的 HTL 里修改为`${"&copy; {0} We.Train. All rights reserved." @ i18n, format='2017', context='html'}`。其中，`@i18n`表示使用国际化
+3. 在 Component 下新增`i18n`节点，在`i18n`节点下新增`fr`节点。`fr`节点新增`jcr:mixTypes="mix:language"`和`jcr:language="fr"`属性
+4. 在[i18n-translator](http://localhost:4502/libs/cq/i18n/translator.html)网页上，找到`/apps/training/components/structure/contentpage/i18n`这个节点，点击`Add`，增加翻译并保存
+5. 此时，在`i18n`节点上刷新，应该能看到新增的翻译
+6. 打开 fr 页面，看到翻译后的语言
 
 ## Debug and Testing
 
