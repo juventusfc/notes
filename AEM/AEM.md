@@ -84,7 +84,35 @@ Granite 包含很多基础模块，比如 Granite UI 等。
 
 - JCR 是一种内容数据库标准，用于存储数据，AEM 的实现采用了 Apache Jackrabbit Oak 项目，在 AEM 里叫 CRX Content Repository。类似于.net 项目中的使用的 SQL Server。
 
-- OSGI 是一种 Bundle 技术，AEM 的实现采用了 Apache Felix 项目。
+- OSGi 是一种 Bundle 技术，AEM 的实现采用了 Apache Felix 项目。
+
+## 搭建框架
+
+1. 推荐使用 Maven 搭建。
+
+   ```bash
+   mvn org.apache.maven.plugins:maven-archetype-plugin:2.4:generate \
+   -DarchetypeGroupId=com.adobe.granite.archetypes \
+   -DarchetypeArtifactId=aem-project-archetype \
+   -DarchetypeVersion=15 \
+   -DarchetypeCatalog=https://repo.adobe.com/nexus/content/groups/public/
+   ```
+
+2. 使用 Git 管理
+
+   ```bash
+   git init
+   ```
+
+3. 搭建后，导入 IntelliJ 和 Brackets 中就可以进行开发了。
+
+## OSGi
+
+OSGi 包含 Component 和 Service。
+
+1. 新建 service 接口
+2. 新建 component，并将 component 注册为一个 service，注册的 service 就是第一步新建的 service
+3. [console-components](http://localhost:4502/system/console/components/) 和 [console-services](http://localhost:4502/system/console/services/) 中查看是否生效。
 
 ## 自带工具
 
