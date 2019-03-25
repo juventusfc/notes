@@ -114,6 +114,16 @@ OSGi 包含 Component 和 Service。
 2. 新建 component，并将 component 注册为一个 service，注册的 service 就是第一步新建的 service
 3. [console-components](http://localhost:4502/system/console/components/) 和 [console-services](http://localhost:4502/system/console/services/) 中查看是否生效。
 
+AEM6.2 之后，推荐使用 `org.osgi.service.component.annotations.*` 和 `org.osgi.service.metatype.annotations.*` 来替代之前的 `org.apache.felix.scr.annotations.*`。
+
+// TODO [参考 1](http://www.nateyolles.com/blog/2017/05/osgi-declarative-services-annotations-in-aem)
+
+[参考 2](https://github.com/nateyolles/aem-osgi-annotation-demo)
+
+## Sling Servelt
+
+Servelt 接口定义了 Servlet 的生命周期。所有 Servlet 都需要实现 Servelt 接口
+
 ## 自带工具
 
 1. Web Console
