@@ -6,11 +6,16 @@
 2. Rename aem-instll to cq-author-p4502.jar. Author means instance name, p4502 means port
 3. Start author instance by double clicking cq-author-p4502.jar
 
-## IntelliJ 配置
+## 开发工具
 
-### Debug
+### IntelliJ
 
-1. 命令行中启动 aem jar
+IntelliJ 主要用于 AEM 中的 Java 开发。
+`mvn -PautoInstallPackage -Padobe-public clean install` 部署至 AEM。
+
+#### Debug
+
+1. 命令行中启动 cq-author-p4502.jar:
    `java -jar cq-author-p4502.jar -fork -forkargs -- -Xdebug -Xrunjdwp:transport=dt_socket,address=59865,suspend=n,server=y -Xmx1520m -XX:MaxPermSize=512m -XX:-UseSplitVerifier`
 2. IntelliJ 中，
    1. Go to **Run**->**Edit Configurations**
@@ -20,18 +25,26 @@
    5. Set breakpoint to code and enjoy your debugging
 3. 当要修改代码并重新 debug 时，需要先将修改后的代码同步至 AEM
 
-## Eclipse 代码与 AEM 的同步
+### Brackets
+
+Brackets 主要用 AEM 中前端的开发。还要安装 AEM Brackets Extension 用以与 AEM 中的代码同步。
+
+### Eclipse
+
+插件不稳定，Eclipse 自身比较卡，不推荐。
+
+#### Eclipse 代码与 AEM 的同步
 
 Eclipse 中，AEM 视图，
 
 - Server 点击 Publish，将 Eclipse 代码部署到 AEM（也可以使用 Maven，语句为`mvn -PautoInstallPackage -Padobe-public clean install`）
 - 代码目录上，点击 import from AEM，将在 AEM 进行的操作同步回 Eclipse 中。一般只会同步用户在 AEM 中建立的 Template 和页面内容。
 
-## 在 eclipse 中展示.content.xml 文件
+#### 在 eclipse 中展示.content.xml 文件
 
 `Project Explore`中点击三角形 --> `Filters And Customization` --> `uncheck *.resources`
 
-## css/js 部署到 AEM
+#### css/js 部署到 AEM
 
 - 使用手工部署方式
 
@@ -61,13 +74,17 @@ AEM 基于 Granite 构建，同时融入了 Sling 和 JCR 技术。
 
 ![high-level](./images/high-level.png)
 
+![aem-archi](./images/aem-archi.png)
+
 ![granite](./images/granite.png)
 
-Granite 包含很多基础模块。其中，OSGI 的实现采用了 Felix 项目。类似于.net 项目中的自带基础功能。
+Granite 包含很多基础模块，比如 Granite UI 等。
 
-Sling 是一种 Web Application Framework。类似于.net 项目中的 MVC 框架，将请求的 URI 映射为 JCR 中的 node(也就是 Resource)。
+- Sling 是一种 Web Application Framework，用于处理 REST 请求。类似于.net 项目中的 MVC 框架，将请求的 URL 映射为 JCR 中的 node(也就是 Resource)。
 
-JCR 是一种内容数据库，用于存储数据。类似于.net 项目中的使用的 SQL Server。
+- JCR 是一种内容数据库标准，用于存储数据，AEM 的实现采用了 Apache Jackrabbit Oak 项目，在 AEM 里叫 CRX Content Repository。类似于.net 项目中的使用的 SQL Server。
+
+- OSGI 是一种 Bundle 技术，AEM 的实现采用了 Apache Felix 项目。
 
 ## 自带工具
 
@@ -477,5 +494,3 @@ Sling Resource Merger 用于 AEM 的覆盖和继承。
 6. 打开 fr 页面，看到翻译后的语言
 
 ## Debug and Testing
-
-## Brackets
