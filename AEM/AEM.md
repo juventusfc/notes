@@ -108,21 +108,83 @@ Granite 包含很多基础模块，比如 Granite UI 等。
 
 ## OSGi
 
-OSGi 包含 Component 和 Service。
+OSGi 是基于 Component 编程的。Component 可以暴露为 Service 给外部使用。常见的 Service 包括 Servelt/Scheduler/Filter/EventHandler 等。同时，AEM 的 admin 可以在后台配置 Service 的参数。
 
-1. 新建 service 接口
-2. 新建 component，并将 component 注册为一个 service，注册的 service 就是第一步新建的 service
-3. [console-components](http://localhost:4502/system/console/components/) 和 [console-services](http://localhost:4502/system/console/services/) 中查看是否生效。
+```java
+// 以Scheduler为例
+
+@Designate(ocd=SimpleScheduledTask.Config.class) // 3. 使用 admin 配置接口
+@Component(service=Runnable.class) // 1. 将 Java 类定义为 OSGi 的 Component，并将该 Component 注册为 Runnable Service
+public class SimpleScheduledTask implements Runnable {
+
+    // 2. 创建 admin 配置接口
+    @ObjectClassDefinition(name="A scheduled task",
+                           description = "Simple demo for cron-job like task with properties")
+    public static @interface Config {
+
+        @AttributeDefinition(name = "Cron-job expression")
+        String scheduler_expression() default "*/30 * * * * ?";
+
+        @AttributeDefinition(name = "Concurrent task",
+                             description = "Whether or not to schedule this task concurrently")
+        boolean scheduler_concurrent() default false;
+
+        @AttributeDefinition(name = "A parameter",
+                             description = "Can be configured in /system/console/configMgr")
+        String myParameter() default "";
+    }
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    private String myParameter;
+
+    // 5. 重写 run()，SimpleScheduledTask 执行时执行
+    @Override
+    public void run() {
+        logger.debug("SimpleScheduledTask is now running, myParameter='{}'", myParameter);
+    }
+
+    // 4. 当 Component 激活时，调用该方法
+    @Activate
+    protected void activate(final Config config) {
+        myParameter = config.myParameter();
+    }
+
+}
+```
+
+[console-components](http://localhost:4502/system/console/components/) 和 [console-services](http://localhost:4502/system/console/services/) 中可以查看是否生效。
 
 AEM6.2 之后，推荐使用 `org.osgi.service.component.annotations.*` 和 `org.osgi.service.metatype.annotations.*` 来替代之前的 `org.apache.felix.scr.annotations.*`。
 
-// TODO [参考 1](http://www.nateyolles.com/blog/2017/05/osgi-declarative-services-annotations-in-aem)
+[参考 1](http://www.nateyolles.com/blog/2017/05/osgi-declarative-services-annotations-in-aem)
 
 [参考 2](https://github.com/nateyolles/aem-osgi-annotation-demo)
 
 ## Sling Servelt
 
-Servelt 接口定义了 Servlet 的生命周期。所有 Servlet 都需要实现 Servelt 接口
+Servelt 接口定义了 Servlet 的生命周期。所有 Servlet 都需要实现 Servelt 接口。
+
+### sling.servlet.resourceTypes VS sling.servlet.path
+
+sling.servlet.resourceTypes 绑定到 resourceType，sling.servlet.path 绑定到路由路径。推荐使用 sling.servlet.resourceTypes。在项目自动生成的 SimpleServlet 中，
+
+```java
+@Component(service=Servlet.class,
+           property={
+                   Constants.SERVICE_DESCRIPTION + "=Simple Demo Servlet",
+                   "sling.servlet.methods=" + HttpConstants.METHOD_GET,
+                   "sling.servlet.resourceTypes="+ "demoproject/components/structure/page",
+                   "sling.servlet.extensions=" + "txt"
+           })
+```
+
+当把上面的代码中的 txt 改为 html 后，访问 `http://localhost:4502/editor.html/content/demoproject/en.html` ,由于
+
+1. 该节点的`sling:resourceType="demoproject/components/structure/page"`
+2. URL 的`extensions="html"`，与 Servelt 中的一致
+
+所以调用了该 Servlet。
 
 ## 自带工具
 
