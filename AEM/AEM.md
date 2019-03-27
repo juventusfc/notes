@@ -111,13 +111,16 @@ Granite 包含很多基础模块，比如 Granite UI 等。
 OSGi 是基于 Component 编程的。Component 可以暴露为 Service 给外部使用。常见的 Service 包括 Servelt/Scheduler/Filter/EventHandler 等。同时，AEM 的 admin 可以在后台配置 Service 的参数。
 
 ```java
-// 以Scheduler为例
+// 以提供一个Runnable Service为例
+// 1. 定义Service接口API，这里是Runnable
+// 2. 实现接口API
+
 
 @Designate(ocd=SimpleScheduledTask.Config.class) // 3. 使用 admin 配置接口
-@Component(service=Runnable.class) // 1. 将 Java 类定义为 OSGi 的 Component，并将该 Component 注册为 Runnable Service
+@Component(service=Runnable.class, immediate=true) // 1. 将 Java 类定义为 OSGi 的 Component，并将该 Component 注册为 Runnable Service。如果将 service=Runnable.class 删除，Service 会自动注册为 Runnable Service，也就是说，会默认注册所有实现的接口的 Service。通常来说最好显示定义 Service。如果不需要注册 Service，写为 service = {}。, immediate=true 表示在启动Component的同时立即启动Service。
 public class SimpleScheduledTask implements Runnable {
 
-    // 2. 创建 admin 配置接口
+    // 2. 创建 admin 配置接口。这是一种 Metatype Generation，不用重启服务器就能获取最新的配置。
     @ObjectClassDefinition(name="A scheduled task",
                            description = "Simple demo for cron-job like task with properties")
     public static @interface Config {
@@ -160,6 +163,14 @@ AEM6.2 之后，推荐使用 `org.osgi.service.component.annotations.*` 和 `org
 [参考 1](http://www.nateyolles.com/blog/2017/05/osgi-declarative-services-annotations-in-aem)
 
 [参考 2](https://github.com/nateyolles/aem-osgi-annotation-demo)
+
+[part I](https://blog.osoco.de/2015/08/osgi-components-simply-simple-part-i/)
+
+[part II](https://blog.osoco.de/2015/08/osgi-components-simply-simple-part-ii/)
+
+[part III](https://blog.osoco.de/2015/11/osgi-components-simply-simple-part-iii/)
+
+OSGi 有一个 SCR(Service Component Runtime) 来管理所有 Component。`@Component`在编译阶段编译，然后在 target 中生成 xml 文件描述这个 Component，类似于 Spring 的机制。部署到 AEM 后，SCR 负责 Component 的运行及依赖。`@Reference`用于定义该 Component 以来的其他 Service。`@Active`和`@Deactive`是 SCR 接管后，Component 的生命周期函数。只有该 Component 的所有 Reference 都正确 Inject 进来后，才会执行`@Activate`。同时，SCR 会管理 Component 需要的配置。
 
 ## Sling Servelt
 
