@@ -43,9 +43,9 @@ public class ServiceImpl extends ServiceInterface {
 
 ## OSGi Resources
 
-[OSGi Specification](https://www.osgi.org/developer/specifications/)
-[Apache Felix](http://felix.apache.org/)
-[AEM OSGi Web Console](http://localhost:4502/system/console)
+- [OSGi Specification](https://www.osgi.org/developer/specifications/)
+- [Apache Felix](http://felix.apache.org/)
+- [AEM OSGi Web Console](http://localhost:4502/system/console)
 
 OSGi 是基于 Component 编程的。Component 可以暴露为 Service 给外部使用。常见的 Service 包括 Servelt/Scheduler/Filter/EventHandler 等。同时，AEM 的 admin 可以在后台配置 Service 的参数。
 
