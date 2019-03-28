@@ -1,5 +1,57 @@
 # JCR
 
+## What is Java Content Repository
+
+- Specification for an unstructured content repository
+  - Similar to a large XML Document
+  - Composed of Nodes and Properties
+- JSR-283 specification defines standard and API
+- Implemented in AEM by Apache Jackrabbit Oak
+- Extended by Adobe’s Granite
+
+## What Does the JCR Provide
+
+- The repository model
+- Create, read, update and delete operations
+- Sessions and access controls
+- Searching
+- Observation
+- Versioning
+
+## JCR Namespaces & Node Type
+
+- Namespaces allow multiple applications to define types of nodes and properties
+- Namespaces are defined with a prefix, delimited by a single colon (:). For example: jcr:title
+- Node types define the structure of a Node, including allowed children and allowed properties
+- Common node types include: nt:unstructured, nt:file, nt:folder,cq:Page, dam:Asset
+
+## JCR Property Types
+
+- String
+- Binary
+- Long
+- Double
+- Date
+- Boolean
+
+## JCR Repository Structure
+
+- /apps – custom application code
+- /conf – templates and content policies
+- /content – all of the web / app content
+- /etc – utilities, tools and data
+- /home – users and groups
+- /oak:index – JCR indexing definitions
+- /tmp – working area
+- /var – system controlled files, events,
+- reports, logs, etc
+
+## JCR Resources
+
+- [Apache Jackrabbit](http://jackrabbit.apache.org/jcr/)
+- [Jackrabbit Oak](http://jackrabbit.apache.org/oak/)
+- [AEM CRXDE Lite](http://localhost:4502/crx/de)
+
 ## node 和 property
 
 node 决定了 JCR 的结构层次，property 决定了 node 的属性。
@@ -64,45 +116,6 @@ multiple
 // and has an on-parent-version setting of ...
 version
 ```
-
-## 渲染过程
-
-PS: XX/ means XX folder
-
-1. Create folders
-   1. Create training/ under apps/
-   2. Create components/ and templates/ under training/
-   3. Create content/ and structure/ under components/
-2. Create a Component
-   1. Right click components/, create component `contentpage`
-   2. Using a html as a default rendering script. The name of html file should be the same as component name
-3. Create a content node
-   1. Under content/, create node `hello-world`
-   2. Add `sling:resourceType = training/components/structure/contentpage` as a node property
-4. Render content
-   1. In browser, using `http://localhost:4502/content/hello-world.html` to render the Component
-
-当在浏览器中输入 URL 时，`/content/hello-world.html`指向 JCR 中的`/content/hello-world`节点。在这个节点上，`sling:resourceType`指向`training/components/structure/contentpage`这个 Component。然后就会渲染这个 Component 的 Render Script，返回给浏览器。
-
-具体的步骤为：
-
-1. Decompose the URL
-
-   ![decompose-url](./images/decompose-url.png)
-
-2. Search for servlet or vanity URL redirect
-3. Search for a node indicated by the URL
-4. Resolve the resource
-
-   ![resolve-request](./images/resolve-request.png)
-
-5. Resolve the rendering script/servlet
-6. Create rendering chain
-7. Invoke rendering chain
-
-![url-rernder-all](./images/url-rernder-all.png)
-
-注意，图中的数字编号与上面描述不匹配。
 
 ## Template
 

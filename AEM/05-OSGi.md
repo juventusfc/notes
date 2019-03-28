@@ -1,5 +1,52 @@
 # OSGi
 
+## What Is OSGi
+
+- Technology specification for a Dynamic Component System
+- Composes applications from reusable Components
+- Components hide their implementation details by default
+- Components communicate via Services Apache Felix is the OSGi implementation for AEM
+
+## OSGi Terminology
+
+- Bundle – Collection of components, similar to a JAR
+- Component – Unit of functionality, similar to a Java Class
+- Service – Interface for communicating between Components and Bundles
+- Service Registry – Manages the services and bundles inside OSGi
+
+## How Does It Work
+
+![osgi-components](./images/osgi-components.png)
+
+## OSGi Annotations(Deprecated)
+
+```java
+@Component(immediate = true)
+@Service(ServiceInterface.class)
+@Properties({ @Property(name =Constants.SERVICE_VENDOR, value = "Company") })
+public class ServiceImpl extends ServiceInterface {
+    @Reference
+    private AnotherService anotherService;
+
+    @Override
+    protected Result doStuff() throws Exception
+    {
+        // ...
+    }
+}
+```
+
+- @Component - Define an OSGi Component
+- @Service – Define an OSGi Service
+- @Property – Define a meta property for an OSGi Component/Service
+- @Reference – Retrieve an OSGi Service
+
+## OSGi Resources
+
+[OSGi Specification](https://www.osgi.org/developer/specifications/)
+[Apache Felix](http://felix.apache.org/)
+[AEM OSGi Web Console](http://localhost:4502/system/console)
+
 OSGi 是基于 Component 编程的。Component 可以暴露为 Service 给外部使用。常见的 Service 包括 Servelt/Scheduler/Filter/EventHandler 等。同时，AEM 的 admin 可以在后台配置 Service 的参数。
 
 ```java

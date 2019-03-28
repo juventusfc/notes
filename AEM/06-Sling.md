@@ -1,5 +1,83 @@
 # Sling
 
+## What Is Apache Sling
+
+- Framework for content-driven applications
+- Built as bundles in OSGi
+- Maps all requests to “Resources”, generally Nodes in the JCR
+- Includes utilities and helpers:
+  - Adapter API
+  - Sling Models
+  - Servlet API
+  - Jobs / Scheduler
+
+## Sling Concepts: Resource Resolution
+
+- Process to resolve and serve all requests in Apache Sling
+- Flexible, extensible model based on naming conventions
+- Key concept: content, not application first
+
+## How Does Sling Resolve Requests
+
+PS: XX/ means XX folder
+
+1. Create folders
+   1. Create training/ under apps/
+   2. Create components/ and templates/ under training/
+   3. Create content/ and structure/ under components/
+2. Create a Component
+   1. Right click components/, create component `contentpage`
+   2. Using a html as a default rendering script. The name of html file should be the same as component name
+3. Create a content node
+   1. Under content/, create node `hello-world`
+   2. Add `sling:resourceType = training/components/structure/contentpage` as a node property
+4. Render content
+   1. In browser, using `http://localhost:4502/content/hello-world.html` to render the Component
+
+当在浏览器中输入 URL 时，`/content/hello-world.html`指向 JCR 中的`/content/hello-world`节点。在这个节点上，`sling:resourceType`指向`training/components/structure/contentpage`这个 Component。然后就会渲染这个 Component 的 Render Script，返回给浏览器。
+
+具体的步骤为：
+
+1. Decompose the URL
+
+   ![decompose-url](./images/decompose-url.png)
+
+2. Search for servlet or vanity URL redirect
+3. Search for a node indicated by the URL
+4. Resolve the resource
+
+   ![resolve-request](./images/resolve-request.png)
+
+5. Resolve the rendering script/servlet
+6. Create rendering chain
+7. Invoke rendering chain
+
+![url-rernder-all](./images/url-rernder-all.png)
+
+注意，图中的数字编号与上面描述不匹配。
+
+## Sling Concepts: Adaption
+
+- Enables “adapting” an object to another type
+- Exposes different methods and functionality for the same data
+- You can create custom AdapterFactories
+
+```java
+import org.apache.sling.api.Resource;
+import java.jcr.Node;
+public void doAdaptation(Resource resource){
+   // I’m adapting my Sling Resource to a JCR Node
+   Node node = resource.adaptTo(Node.class);
+   // Now I can use this as a node
+   node.checkin();
+}
+```
+
+## Sling Resources
+
+- [Apache Sling](https://sling.apache.org/)
+- [Apache Sling 9 JavaDocs](https://sling.apache.org/apidocs/sling9/index.html)
+
 ## Sling Servelt
 
 Servelt 接口定义了 Servlet 的生命周期。所有 Servlet 都需要实现 Servelt 接口。
