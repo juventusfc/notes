@@ -47,8 +47,6 @@ AEM 基于 Granite 构建，同时融入了 Sling 和 JCR 技术。
 
 ![granite](./images/granite.png)
 
-- Granite 包含很多基础模块，比如 Granite UI 等。
-
 ### OSGi framework
 
 OSGi framework 是一种 Bundle 技术标准，AEM 的实现采用了 Apache Felix 项目。它是 Application Runtime。
@@ -60,3 +58,25 @@ JCR 是一种内容数据库标准，用于存储数据，AEM 的实现采用了
 ### Apache Sling
 
 Apache Sling 用于处理 REST 请求。类似于.net 项目中的 MVC 框架，将请求的 URL 映射为 JCR 中的 node(也就是 Resource)。它是一种 Web Application Framework
+
+### Granite/CoralUI
+
+Granite 包含很多基础模块，比如 Granite UI 等。
+
+### Primary Application Components
+
+#### What Are the Primary Components of AEM
+
+Authoring first:
+
+- Projects Console
+- Sites Console
+- DAM Console
+
+#### How Do You Administer AEM
+
+- [Users / Groups Admin](http://localhost:4502/libs/granite/security/content/useradmin.html)
+- [Tags Console](http://localhost:4502/libs/cq/tagging/gui/content/tags.html)
+- [Package Manager](http://localhost:4502/crx/packmgr)
+- [CRXDE Lite](http://localhost:4502/crx/de)
+- [OSGi Console](http://localhost:4502/system/console)

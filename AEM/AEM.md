@@ -14,7 +14,9 @@
 
 ## [JCR](./07-JCR.md)
 
-## [AEM APIs](./08-AEMAPIs.md)
+## [Granite/CoralUI](./08-Granite-CoralUI.md)
+
+## [AEM APIs](./09-AEMAPIs.md)
 
 ## Confuiguring AEM
 
