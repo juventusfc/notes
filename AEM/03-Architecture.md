@@ -61,19 +61,18 @@ Apache Sling 用于处理 REST 请求。类似于.net 项目中的 MVC 框架，
 
 ### Granite/CoralUI
 
-Granite 包含很多基础模块，比如 Granite UI 等。
+- Granite 以 OSGi/Sling/JCR 为基础，提供 Granite UI 等基础模块。Granite UI 是后端代码，用于构建 Touch UI 或其他 Component
+- Coral UI 是前端代码，是一种 mark up，用于提供用户接口。
 
 ### Primary Application Components
 
-#### What Are the Primary Components of AEM
-
-Authoring first:
+#### Components of AEM author
 
 - Projects Console
 - Sites Console
 - DAM Console
 
-#### How Do You Administer AEM
+#### Components of AEM Administer
 
 - [Users / Groups Admin](http://localhost:4502/libs/granite/security/content/useradmin.html)
 - [Tags Console](http://localhost:4502/libs/cq/tagging/gui/content/tags.html)
