@@ -8,7 +8,9 @@
 
 ## [项目搭建](./04-Setup.md)
 
-## [OSGi](./05-OSGi.md)
+## [AEM Package Structure](./05-package-structure.md)
+
+## [OSGi](./06-OSGi.md)
 
 ## [Sling](./06-Sling.md)
 

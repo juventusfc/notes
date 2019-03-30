@@ -32,6 +32,10 @@
 
 PS:根据教程，在这里通过 Package 上传了 SamplePackage.zip
 
+## Maven
+
+Maven is used to build bundles/packages into AEM server. Maven version > 3.0
+
 ## IntelliJ
 
 IntelliJ 主要用于 AEM 中的 Java 开发。
