@@ -18,7 +18,29 @@
 
 ![osgi-components](./images/osgi-components.png)
 
-## OSGi Annotations(Deprecated)
+- AEM runs inside OSGi Framework
+- OSGi Services expose interactions within and between OSGi Bundles
+- Generally a Java Interface
+- Implemented by one or more OSGi Components
+
+## 3 Steps to Your Own OSGi Service
+
+1. Create Service Java Interface
+2. Create Component Class(es)
+3. Add OSGi Annotations
+
+## OSGi Annotations
+
+- @Component – Defines the component class and properties.Common options are:
+  - service – The service(s) this component implements
+  - property – key=value static properties
+  - factory – Multiple instances of this component can be created
+  - Immediate – Start the component immediately
+- @Activate – Method to call when component is started
+- @Deactivate – Method to call when component is stopped
+- @Reference – Inject another OSGi Service
+
+## Felix SCR annotations(Deprecated)
 
 ```java
 @Component(immediate = true)
@@ -41,11 +63,112 @@ public class ServiceImpl extends ServiceInterface {
 - @Property – Define a meta property for an OSGi Component/Service
 - @Reference – Retrieve an OSGi Service
 
-## OSGi Resources
+## Servelts
 
-- [OSGi Specification](https://www.osgi.org/developer/specifications/)
-- [Apache Felix](http://felix.apache.org/)
-- [AEM OSGi Web Console](http://localhost:4502/system/console)
+Servelt is used to respond to requests and serve responses. Steps are:
+
+- Create a Component class extending SlingSafeMethodsServlet or SlingAllMethodsServlet
+- Add the @Component annotation with service={Servlet.class}
+- Add properties for either a path or a resource type
+- Add additional properties for selectors, extensions or methods
+
+```java
+@Component(service={Servlet.class}, // This component registers a new service in AEM
+    property= {
+    "sling.servlet.path=/bin/service", // It will respond to GET requests on the path /bin/service
+    "sling.servlet.methods=GET"
+    })
+public class MyServlet extends SlingSafeMethodsServlet {
+    @Reference
+    private JobManager jobManager; // The Job Manager is another OSGi Service
+
+    @Activate
+    protected void init(ComponentContext context){ // The init method will be called when the component starts
+        // initialize
+    }
+}
+```
+
+### sling.servlet.resourceTypes VS sling.servlet.path
+
+sling.servlet.resourceTypes 绑定到 resourceType，sling.servlet.path 绑定到路由路径。推荐使用 sling.servlet.resourceTypes。在项目自动生成的 SimpleServlet 中，
+
+```java
+@Component(service=Servlet.class,
+    property={
+            Constants.SERVICE_DESCRIPTION + "=Simple Demo Servlet",
+            "sling.servlet.methods=" + HttpConstants.METHOD_GET,
+            "sling.servlet.resourceTypes="+ "demoproject/components/structure/page",
+            "sling.servlet.extensions=" + "txt"
+    })
+```
+
+当把上面的代码中的 txt 改为 html 后，访问 `http://localhost:4502/editor.html/content/demoproject/en.html` ,由于
+
+1. 该节点的`sling:resourceType="demoproject/components/structure/page"`
+2. URL 的`extensions="html"`，与 Servelt 中的一致
+
+所以调用了该 Servlet。
+
+## Filter
+
+Filter is used to intercept requests and can modify responses. Steps are:
+
+- Create a Component class implementing Filter
+- Add the @Component annotation with service={Filter.class}
+- Add property for the filter scope (REQUEST, INCLUDE, FORWARD,ERROR, COMPONENT)
+- Optionally, add additional properties for ranking and pattern
+
+```java
+package com.globomantics.core.filters;
+
+import java.io.IOException;
+
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.SlingHttpServletResponse;
+import org.osgi.service.component.annotations.Component;
+
+@Component(service = Filter.class, property = { "sling.filter.scope=REQUEST" })
+public class RedirectFilter implements Filter {
+
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+        // do nothing
+    }
+
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        if(request instanceof SlingHttpServletRequest){
+            SlingHttpServletRequest slingRequest = (SlingHttpServletRequest) request;
+            HttpServletResponse slingResponse = (SlingHttpServletResponse) response;
+            if("baidu".equals(slingRequest.getRequestPathInfo().getSelectorString())){
+                slingResponse.sendRedirect("http://www.baidu.com"); // 如果包含 baidu，redirect 至百度首页
+                return;
+            }
+        }
+        chain.doFilter(request, response);
+    }
+
+    @Override
+    public void destroy() {
+        // do nothing
+    }
+
+}
+```
+
+![fiter-redirect](./images/fiter-redirect.png)
+
+## a
 
 OSGi 是基于 Component 编程的。Component 可以暴露为 Service 给外部使用。常见的 Service 包括 Servelt/Scheduler/Filter/EventHandler 等。同时，AEM 的 admin 可以在后台配置 Service 的参数。
 
@@ -109,4 +232,10 @@ AEM6.2 之后，推荐使用 `org.osgi.service.component.annotations.*` 和 `org
 
 [part III](https://blog.osoco.de/2015/11/osgi-components-simply-simple-part-iii/)
 
-OSGi 有一个 SCR(Service Component Runtime) 来管理所有 Component。`@Component`在编译阶段编译，然后在 target 中生成 xml 文件描述这个 Component，类似于 Spring 的机制。部署到 AEM 后，SCR 负责 Component 的运行及依赖。`@Reference`用于定义该 Component 以来的其他 Service。`@Active`和`@Deactive`是 SCR 接管后，Component 的生命周期函数。只有该 Component 的所有 Reference 都正确 Inject 进来后，才会执行`@Activate`。同时，SCR 会管理 Component 需要的配置。
+OSGi 有一个 SCR(Service Component Runtime) 来管理所有 Component。`@Component`在编译阶段编译，然后在 target 中生成 xml 文件描述这个 Component，类似于 Spring 的机制。部署到 AEM 后，SCR 负责 Component 的运行及依赖。`@Reference`用于定义该 Component 依赖的其他 Service。`@Active`和`@Deactive`是 SCR 接管后，Component 的生命周期函数。只有该 Component 的所有 Reference 都正确引用后，才会执行`@Activate`。同时，SCR 会管理 Component 需要的配置。
+
+## OSGi Resources
+
+- [OSGi Specification](https://www.osgi.org/developer/specifications/)
+- [Apache Felix](http://felix.apache.org/)
+- [AEM OSGi Web Console](http://localhost:4502/system/console)

@@ -82,27 +82,6 @@ public void doAdaptation(Resource resource){
 
 Servelt 接口定义了 Servlet 的生命周期。所有 Servlet 都需要实现 Servelt 接口。
 
-### sling.servlet.resourceTypes VS sling.servlet.path
-
-sling.servlet.resourceTypes 绑定到 resourceType，sling.servlet.path 绑定到路由路径。推荐使用 sling.servlet.resourceTypes。在项目自动生成的 SimpleServlet 中，
-
-```java
-@Component(service=Servlet.class,
-           property={
-                   Constants.SERVICE_DESCRIPTION + "=Simple Demo Servlet",
-                   "sling.servlet.methods=" + HttpConstants.METHOD_GET,
-                   "sling.servlet.resourceTypes="+ "demoproject/components/structure/page",
-                   "sling.servlet.extensions=" + "txt"
-           })
-```
-
-当把上面的代码中的 txt 改为 html 后，访问 `http://localhost:4502/editor.html/content/demoproject/en.html` ,由于
-
-1. 该节点的`sling:resourceType="demoproject/components/structure/page"`
-2. URL 的`extensions="html"`，与 Servelt 中的一致
-
-所以调用了该 Servlet。
-
 ## Sling Other
 
 ### 在 HTL 中增加 selectors
