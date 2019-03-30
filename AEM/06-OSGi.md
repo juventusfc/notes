@@ -1,6 +1,61 @@
 # OSGi
 
+## Quick Start
+
+```java
+// 以提供一个Runnable Service为例
+// 1. 定义Service接口API，这里是Runnable
+// 2. 实现接口API
+
+@Designate(ocd=SimpleScheduledTask.Config.class) // 3. 使用 admin 配置接口
+@Component(service=Runnable.class, immediate=true) // 1. 将 Java 类定义为 OSGi 的 Component，并将该 Component 注册为 Runnable Service。如果将 service=Runnable.class 删除，Service 会自动注册为 Runnable Service，也就是说，会默认注册所有实现的接口的 Service。通常来说最好显示定义 Service。如果不需要注册 Service，写为 service = {}。, immediate=true 表示在启动Component的同时立即启动Service。
+public class SimpleScheduledTask implements Runnable {
+
+    // 2. 创建 admin 配置接口。这是一种 Metatype Generation，不用重启服务器就能获取最新的配置。
+    @ObjectClassDefinition(name="A scheduled task",
+                           description = "Simple demo for cron-job like task with properties")
+    public static @interface Config {
+
+        @AttributeDefinition(name = "Cron-job expression")
+        String scheduler_expression() default "*/30 * * * * ?";
+
+        @AttributeDefinition(name = "Concurrent task",
+                             description = "Whether or not to schedule this task concurrently")
+        boolean scheduler_concurrent() default false;
+
+        @AttributeDefinition(name = "A parameter",
+                             description = "Can be configured in /system/console/configMgr")
+        String myParameter() default "";
+    }
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+
+    private String myParameter;
+
+    // 5. 重写 run()，SimpleScheduledTask 执行时执行
+    @Override
+    public void run() {
+        logger.debug("SimpleScheduledTask is now running, myParameter='{}'", myParameter);
+    }
+
+    // 4. 当 Component 激活时，调用该方法
+    @Activate
+    protected void activate(final Config config) {
+        myParameter = config.myParameter();
+    }
+
+}
+```
+
+[console-components](http://localhost:4502/system/console/components/) 和 [console-services](http://localhost:4502/system/console/services/) 中可以查看是否生效。
+
+AEM6.2 之后，推荐使用 `org.osgi.service.component.annotations.*` 和 `org.osgi.service.metatype.annotations.*` 来替代之前的 `org.apache.felix.scr.annotations.*`。
+
 ## What Is OSGi
+
+OSGi 是基于 Component 编程的。Component 可以暴露为 Service 给外部使用。常见的 Service 包括 Servelt/Scheduler/Filter/EventHandler 等。同时，AEM 的 admin 可以在后台配置 Service 的参数。
+
+OSGi 有一个 SCR(Service Component Runtime) 来管理所有 Component。`@Component`在编译阶段编译，然后在 target 中生成 xml 文件描述这个 Component，类似于 Spring 的机制。部署到 AEM 后，SCR 负责 Component 的运行及依赖。`@Reference`用于定义该 Component 依赖的其他 Service。`@Active`和`@Deactive`是 SCR 接管后，Component 的生命周期函数。只有该 Component 的所有 Reference 都正确引用后，才会执行`@Activate`。同时，SCR 会管理 Component 需要的配置。
 
 - Technology specification for a Dynamic Component System
 - Composes applications from reusable Components
@@ -264,13 +319,15 @@ public class JSONUpdater implements Runnable {
 ![events](./images/events.png)
 
 ```java
+// Trigger an event on a Component
 @Component(immediate=true)
-public class EventTrigger {
+public class EventTrigger implements Runnable {
     @Reference
     private EventAdmin eventAdmin; // 1. Inject the EventAdmin
 
-    public void someMethod(){
-        Map<String,Object properties = new HashMap<String,Object>();
+    @Override
+    public void run(){
+        Map<String,Object> properties = new HashMap<String,Object>();
         properties.put("key","value");
         Event newEvent = new Event("com/co/eventtrigger/TRIGGERED",properties); // 2. Set event properties
         eventAdmin.sendEvent(newEvent); //3. Triggering the event
@@ -279,6 +336,7 @@ public class EventTrigger {
 ```
 
 ```java
+// EventHandle to handle that event
 @Component(service={EventHandler.class}, property={
     EventConstants.EVENT_TOPIC+"=com/co/eventtrigger/TRIGGERED" // 4. Register event handler by topic
     })
@@ -294,12 +352,14 @@ public class MyEventHandler implements EventHandler {
 ![jobs](./images/jobs.png)
 
 ```java
+// Start a job
 @Component(immediate=true)
-public class JobTrigger {
+public class JobTrigger implements Runnable{
     @Reference
     private JobManager jobManager; // 1. Inject the JobManager
 
-    public void someMethod(){
+    @Override
+    public void run(){
         Map<String,Object properties = new HashMap<String,Object>();
         properties.put("key","value"); // 2. Set Job properties
         jobManager.addJob("com/co/jobtrigger/TRIGGERED", properties); // 3. Add the job
@@ -308,84 +368,143 @@ public class JobTrigger {
 ```
 
 ```java
+// Consume the Job
 @Component(service={JobConsumer.class}, property={
     JobConsumer.PROPERTY_TOPICS+"=com/co/jobtrigger/TRIGGERED" // 4. Register job consumer by topic
     })
 public class MyJobConsumer implements JobConsumer {
-    public void process(Job job) { // 5. Called when job is started
+    public JobResult process(Job job) { // 5. Called when job is started
         return JobResult.OK;
     }
 }
 ```
 
-## a
+## Common Ways to Get an OSGi Service
 
-OSGi 是基于 Component 编程的。Component 可以暴露为 Service 给外部使用。常见的 Service 包括 Servelt/Scheduler/Filter/EventHandler 等。同时，AEM 的 admin 可以在后台配置 Service 的参数。
+### @Reference in an OSGi Component
+
+- Injects a Service into a field in an OSGi Component
+- References can either be: Optional, Mandatory, Multiple or At Least One
+- References can be filtered using LDAP expressions
 
 ```java
-// 以提供一个Runnable Service为例
-// 1. 定义Service接口API，这里是Runnable
-// 2. 实现接口API
+package com.globomantics.core.impl;
 
+import java.util.List;
 
-@Designate(ocd=SimpleScheduledTask.Config.class) // 3. 使用 admin 配置接口
-@Component(service=Runnable.class, immediate=true) // 1. 将 Java 类定义为 OSGi 的 Component，并将该 Component 注册为 Runnable Service。如果将 service=Runnable.class 删除，Service 会自动注册为 Runnable Service，也就是说，会默认注册所有实现的接口的 Service。通常来说最好显示定义 Service。如果不需要注册 Service，写为 service = {}。, immediate=true 表示在启动Component的同时立即启动Service。
-public class SimpleScheduledTask implements Runnable {
+import javax.servlet.Servlet;
 
-    // 2. 创建 admin 配置接口。这是一种 Metatype Generation，不用重启服务器就能获取最新的配置。
-    @ObjectClassDefinition(name="A scheduled task",
-                           description = "Simple demo for cron-job like task with properties")
-    public static @interface Config {
+import org.apache.sling.api.resource.Resource;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-        @AttributeDefinition(name = "Cron-job expression")
-        String scheduler_expression() default "*/30 * * * * ?";
+@Component(immediate = true)
+public class ReferenceTestComponent {
 
-        @AttributeDefinition(name = "Concurrent task",
-                             description = "Whether or not to schedule this task concurrently")
-        boolean scheduler_concurrent() default false;
+    @Reference(cardinality = ReferenceCardinality.OPTIONAL)
+    private Resource resource;
 
-        @AttributeDefinition(name = "A parameter",
-                             description = "Can be configured in /system/console/configMgr")
-        String myParameter() default "";
-    }
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE)
+    private List<Servlet> servlets;
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    @Reference(cardinality = ReferenceCardinality.MULTIPLE, target = "(sling.servlet.methods=POST)")
+    private List<Servlet> postServlets;
 
-    private String myParameter;
+    private static final Logger log = LoggerFactory.getLogger(ReferenceTestComponent.class);
 
-    // 5. 重写 run()，SimpleScheduledTask 执行时执行
-    @Override
-    public void run() {
-        logger.debug("SimpleScheduledTask is now running, myParameter='{}'", myParameter);
-    }
-
-    // 4. 当 Component 激活时，调用该方法
     @Activate
-    protected void activate(final Config config) {
-        myParameter = config.myParameter();
+    protected void activate() {
+
+        log.info("Optional Reference: {}", resource);
+        log.info("Servlets Registered: {}", servlets.size());
+        log.info("POST Servlets Registered: {}", postServlets.size());
+    }
+}
+```
+
+### @Inject into a Sling Model
+
+- Sling Models are adaptable from Resources,SlingHttpServletRequests
+- Enable injecting properties, child resources and services
+- Uses the @Inject annotation
+
+```java
+package com.globomantics.core.models;
+
+import java.net.URL;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import org.apache.sling.api.resource.Resource;
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.Optional;
+import org.apache.sling.models.annotations.Source;
+
+import com.globomantics.core.RSSJsonService;
+
+@Model(adaptables=Resource.class)
+public class RSSFeedModel {
+
+    @Inject
+    @Optional
+    private String feedUrl;
+
+    @Inject
+    @Source("osgi-services")
+    private RSSJsonService rss2json;
+
+    public Map<String,Object> getFeed() throws Exception{
+        return rss2json.getMap(new URL(feedUrl));
+    }
+}
+```
+
+### Retrieve in WCMUsePojo via SlingScriptHelper
+
+- WCMUsePojo are retrievable in HTL / Sightly Scripts
+- Enable access to script variables
+- Services can be retrieved from the SlingScriptHelper
+
+```java
+package com.globomantics.core.htl;
+
+import java.net.URL;
+import java.util.Map;
+
+import com.adobe.cq.sightly.WCMUsePojo;
+import com.globomantics.core.RSSJsonService;
+
+public class RSSFeedPojo extends WCMUsePojo {
+
+    private RSSJsonService rss2json;
+
+    private URL feedUrl;
+
+    public Map<String,Object> getFeed() throws Exception {
+        return rss2json.getMap(feedUrl);
+    }
+
+    @Override
+    public void activate() throws Exception {
+        rss2json = this.getSlingScriptHelper().getService(RSSJsonService.class);
+        feedUrl = new URL(this.getProperties().get("feedUrl", String.class));
     }
 
 }
 ```
-
-[console-components](http://localhost:4502/system/console/components/) 和 [console-services](http://localhost:4502/system/console/services/) 中可以查看是否生效。
-
-AEM6.2 之后，推荐使用 `org.osgi.service.component.annotations.*` 和 `org.osgi.service.metatype.annotations.*` 来替代之前的 `org.apache.felix.scr.annotations.*`。
-
-[参考 1](http://www.nateyolles.com/blog/2017/05/osgi-declarative-services-annotations-in-aem)
-
-[参考 2](https://github.com/nateyolles/aem-osgi-annotation-demo)
-
-[part I](https://blog.osoco.de/2015/08/osgi-components-simply-simple-part-i/)
-
-[part II](https://blog.osoco.de/2015/08/osgi-components-simply-simple-part-ii/)
-
-[part III](https://blog.osoco.de/2015/11/osgi-components-simply-simple-part-iii/)
-
-OSGi 有一个 SCR(Service Component Runtime) 来管理所有 Component。`@Component`在编译阶段编译，然后在 target 中生成 xml 文件描述这个 Component，类似于 Spring 的机制。部署到 AEM 后，SCR 负责 Component 的运行及依赖。`@Reference`用于定义该 Component 依赖的其他 Service。`@Active`和`@Deactive`是 SCR 接管后，Component 的生命周期函数。只有该 Component 的所有 Reference 都正确引用后，才会执行`@Activate`。同时，SCR 会管理 Component 需要的配置。
 
 ## OSGi Resources
 
 - [OSGi Specification](https://www.osgi.org/developer/specifications/)
 - [Apache Felix](http://felix.apache.org/)
 - [AEM OSGi Web Console](http://localhost:4502/system/console)
+- [osgi-declarative-services-annotations-in-aem](http://www.nateyolles.com/blog/2017/05/osgi-declarative-services-annotations-in-aem)
+- [aem-osgi-annotation-demo](https://github.com/nateyolles/aem-osgi-annotation-demo)
+- [osgi-components-simply-simple part I](https://blog.osoco.de/2015/08/osgi-components-simply-simple-part-i/)
+- [osgi-components-simply-simple part II](https://blog.osoco.de/2015/08/osgi-components-simply-simple-part-ii/)
+- [osgi-components-simply-simple part III](https://blog.osoco.de/2015/11/osgi-components-simply-simple-part-iii/)
