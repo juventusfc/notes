@@ -20,7 +20,7 @@
 
 ## [AEM APIs](./09-AEMAPIs.md)
 
-## Confuiguring AEM
+## [Confuiguring AEM](./10-config.md)
 
 ## Services
 
