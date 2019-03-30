@@ -168,6 +168,156 @@ public class RedirectFilter implements Filter {
 
 ![fiter-redirect](./images/fiter-redirect.png)
 
+## Scheduled Tasks
+
+- Schedule jobs to run on a cron expression
+- Schedule jobs to run on an interval
+- Scheduler can prevent concurrent execution
+
+### Cron Expressions 101
+
+Made of six or seven expression fields
+
+    - Seconds - 0-59
+    - Minutes - 0-59
+    - Hours - 0-23
+    - Day of month - 1-31
+    - Month - 0-11 or JAN-DEC
+    - Day of week - 1-7 or SUN-SAT
+    - Year - empty or 1970-2099
+
+[Online Cron](http://www.cronmaker.com/)
+
+### Periodic job VS Cron based job
+
+```java
+package com.globomantics.core.schedulers;
+
+import java.net.URL;
+import java.util.HashMap;
+
+import org.apache.sling.api.resource.ResourceResolver;
+import org.apache.sling.api.resource.ResourceResolverFactory;
+import org.apache.sling.event.jobs.JobManager;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.globomantics.core.RSSJsonService;
+import com.globomantics.core.utils.ResourceResolverUtil;
+
+@Component(service = Runnable.class, property = { "scheduler.period:Long=30" })
+// @Component(service = Runnable.class, property = { "scheduler.expression=*/30 * * * * MON-FRI" })
+public class JSONUpdater implements Runnable {
+
+    @Reference
+    private ResourceResolverFactory factory;
+
+    @Reference
+    private RSSJsonService rss2json;
+
+    @Reference
+    private JobManager jobManager;
+
+    private static final Logger log = LoggerFactory.getLogger(JSONUpdater.class);
+
+    public static final String JOB_TOPIC="com/globomantics/core/JSONUpdater/COMPLETE";
+
+    @Override
+    public void run() {
+        log.trace("run");
+        ResourceResolver adminResolver = null;
+        try {
+            adminResolver = ResourceResolverUtil.getResourceResolver(factory);
+            rss2json.updateResource(new URL("https://www.danklco.com/feed.xml"), adminResolver, "/content/feed.json");
+            jobManager.addJob(JOB_TOPIC, new HashMap<String,Object>(){
+                private static final long serialVersionUID = 1L;
+                {
+                    put("feed.target", "/content/feed.json");
+                }
+            });
+        } catch (Exception e) {
+            log.error("Exception persisting feed", e);
+        } finally {
+            if (adminResolver != null) {
+                adminResolver.close();
+            }
+        }
+    }
+
+}
+```
+
+## Events && Jobs
+
+- Mechanism for "triggering" code via asynchronous events
+- Support custom triggers and payloads
+- Handlers can filter events / jobs
+
+### What's the Difference Between Events and
+
+![events-job](./images/events-job.png)
+
+### Events
+
+![events](./images/events.png)
+
+```java
+@Component(immediate=true)
+public class EventTrigger {
+    @Reference
+    private EventAdmin eventAdmin; // 1. Inject the EventAdmin
+
+    public void someMethod(){
+        Map<String,Object properties = new HashMap<String,Object>();
+        properties.put("key","value");
+        Event newEvent = new Event("com/co/eventtrigger/TRIGGERED",properties); // 2. Set event properties
+        eventAdmin.sendEvent(newEvent); //3. Triggering the event
+    }
+}
+```
+
+```java
+@Component(service={EventHandler.class}, property={
+    EventConstants.EVENT_TOPIC+"=com/co/eventtrigger/TRIGGERED" // 4. Register event handler by topic
+    })
+public class MyEventHandler implements EventHandler {
+    public void handleEvent(Event event) { // 5. Called when event is triggered
+        Object value = event.getProperty("key");
+    }
+}
+```
+
+### Jobs
+
+![jobs](./images/jobs.png)
+
+```java
+@Component(immediate=true)
+public class JobTrigger {
+    @Reference
+    private JobManager jobManager; // 1. Inject the JobManager
+
+    public void someMethod(){
+        Map<String,Object properties = new HashMap<String,Object>();
+        properties.put("key","value"); // 2. Set Job properties
+        jobManager.addJob("com/co/jobtrigger/TRIGGERED", properties); // 3. Add the job
+    }
+}
+```
+
+```java
+@Component(service={JobConsumer.class}, property={
+    JobConsumer.PROPERTY_TOPICS+"=com/co/jobtrigger/TRIGGERED" // 4. Register job consumer by topic
+    })
+public class MyJobConsumer implements JobConsumer {
+    public void process(Job job) { // 5. Called when job is started
+        return JobResult.OK;
+    }
+}
+```
+
 ## a
 
 OSGi 是基于 Component 编程的。Component 可以暴露为 Service 给外部使用。常见的 Service 包括 Servelt/Scheduler/Filter/EventHandler 等。同时，AEM 的 admin 可以在后台配置 Service 的参数。
