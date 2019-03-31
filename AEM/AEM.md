@@ -12,6 +12,10 @@
 
 ## [OSGi](./06-OSGi.md)
 
+## [Confuiguring AEM](./07-config.md)
+
+## [Logging](./08-Logging.md)
+
 ## [Sling](./06-Sling.md)
 
 ## [JCR](./07-JCR.md)
@@ -20,15 +24,11 @@
 
 ## [AEM APIs](./09-AEMAPIs.md)
 
-## [Confuiguring AEM](./10-config.md)
-
 ## Services
 
 ## Servlets
 
 ## Jobs
-
-## Logging
 
 ## Tests
 
