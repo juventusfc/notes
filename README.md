@@ -6,6 +6,11 @@
 
 ## Front End
 
+前端主要包括两方面
+
+1. 立足标准，系统性总结和整理前端知识，建立认知和方法论。主要包括 HTML/JavaScript/CSS/Browser。
+2. 放眼团队，从业务和工程角度思考前端价值和发展。主要包括前端工程化相关知识。
+
 ### HTML
 
 - [HTML](/HTML/HTML.md)
@@ -17,9 +22,14 @@
 
 ### JavaScript
 
+对任何编程语言来说，必定是**用规定的文法，表达特定语义，最终操作运行时**。
+
 - [文法](/JavaScript/文法.md)
 - [语义](/JavaScript/语义.md)
 - [运行时](/JavaScript/运行时.md)
+
+#### Others
+
 - [ECMAScript6 入门](/JavaScript/ECMAScript6入门.md)
 
 #### YDKJS
@@ -77,7 +87,7 @@
 
 - [C# Basic](/C-Sharp/C-Sharp-basic.md)
 
-## Others
+## Other Notes
 
 ### 常用短笔记
 
