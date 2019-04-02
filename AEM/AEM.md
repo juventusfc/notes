@@ -1,5 +1,18 @@
 # AEM Develop Guides
 
+## Tips
+
+开发一个 Component 的流程
+
+1. 参考 OOTB 的写法
+   - foundation/components/text （JSP）
+   - wcm/foundation/components/text （HTL）
+   - core/wcm/components/text/v2/text （Core Component）
+2. 参考 OOTB 中的 cq:dialog 写法
+   - 一般 OOTB 的 cq:dialog 的 `sling:resourceType=cq/gui/components/authoring/dialog`
+   - 建议使用 `sling:resourceType=granite/ui/components/coral/foundation/*`
+   - 如果包含图片/文件上传，使用`sling:resourceType=cq/gui/components/authoring/dialog/fileupload`
+
 ## [安装](./01-Install.md)
 
 ## [开发工具](./02-Tools.md)
@@ -23,12 +36,6 @@
 ## [Granite/CoralUI](./08-Granite-CoralUI.md)
 
 ## [AEM APIs](./09-AEMAPIs.md)
-
-## Services
-
-## Servlets
-
-## Jobs
 
 ## Tests
 
