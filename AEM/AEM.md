@@ -13,6 +13,11 @@
    - 建议使用 `sling:resourceType=granite/ui/components/coral/foundation/*`
    - 如果包含图片/文件上传，使用`sling:resourceType=cq/gui/components/authoring/dialog/fileupload`
 
+Sling Model 能将 Resource 映射为 POJO ，能应用在：
+
+1. 直接在 HTL 中使用，HTL 所在得节点对应的 Resouce 映射为 Sling Model
+2. 在 OSGi 的 Service 里使用。在 Service 中获得 Resource 并映射为 Sling Model
+
 ## [安装](./01-Install.md)
 
 ## [开发工具](./02-Tools.md)

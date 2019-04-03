@@ -11,6 +11,8 @@
 1. 立足标准，系统性总结和整理前端知识，建立认知和方法论。主要包括 HTML/JavaScript/CSS/Browser。
 2. 放眼团队，从业务和工程角度思考前端价值和发展。主要包括前端工程化相关知识。
 
+[思维导图](https://www.processon.com/mindmap/5a5ca9efe4b0abe85d57b564)
+
 ### HTML
 
 - [HTML](/HTML/HTML.md)

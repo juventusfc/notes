@@ -62,6 +62,19 @@ OSGi 有一个 SCR(Service Component Runtime) 来管理所有 Component。`@Comp
 - Components hide their implementation details by default
 - Components communicate via Services Apache Felix is the OSGi implementation for AEM
 
+## Layers
+
+OSGi 的思想主要是模块化，类似于前端工程的模块化。其中，模块之间的依赖关系，模块的配置由 OSGi Container 负责。
+
+![layering-osgi](./images/layering-osgi.png)
+
+- Bundles – Bundles are the OSGi components made by the developers.Bundles 用通俗点的说法就是 JAR + MetaData INF。MetaData Info 包含 Names/Vsersion/Service Imported and Exported/optional meta。Bundle 和 Java JAR 的主要区别是，多个 Java JAR 是在容器内可见的，而 Bundle 在容器内需要显式得声明 Import 和 Export。
+- Services – The services layer connects bundles in a dynamic way by offering a publish-find-bind model for plain old Java objects.
+- Life-Cycle – The API to install, start, stop, update, and uninstall bundles.
+- Modules – The layer that defines how a bundle can import and export code.
+- Security – The layer that handles the security aspects.
+- Execution Environment – Defines what methods and classes are available in a specific platform.
+
 ## OSGi Terminology
 
 - Bundle – Collection of components, similar to a JAR
@@ -78,13 +91,57 @@ OSGi 有一个 SCR(Service Component Runtime) 来管理所有 Component。`@Comp
 - Generally a Java Interface
 - Implemented by one or more OSGi Components
 
-## 3 Steps to Your Own OSGi Service
+## Activate a Bundle
+
+**If you use Annotations to create Component, you do not need to activate a bundle by yourself**. The steps for activating a bundle is
+
+1. Define a Activator
+
+   ```java
+   package com.adobe.training.core;
+
+   import org.osgi.framework.BundleActivator;
+   import org.osgi.framework.BundleContext;
+
+   import org.slf4j.Logger;
+   import org.slf4j.LoggerFactory;
+
+   /**
+   * Add this line to the configuration instructions for the maven-bundle-plugin in the POM
+   * <Bundle-Activator>com.adobe.training.core.Activator</Bundle-Activator>
+   */
+   public class Activator implements BundleActivator {
+       private final Logger logger = LoggerFactory.getLogger(getClass());
+
+       /*
+       * (non-Javadoc)
+       * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
+       */
+       public void start(BundleContext context) throws Exception {
+           logger.info("##################Bundle Started##################");
+       }
+
+       /*
+       * (non-Javadoc)
+       * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
+       */
+       public void stop(BundleContext context) throws Exception {
+           logger.info("##################Bundle Stopped##################");
+       }
+
+   }
+   ```
+
+2. Add this line to the configuration instructions for the maven-bundle-plugin in the POM
+   `<Bundle-Activator>com.adobe.training.core.Activator</Bundle-Activator>`
+
+## 3 Steps to Your Own OSGi Service using Annotations
 
 1. Create Service Java Interface
 2. Create Component Class(es)
 3. Add OSGi Annotations
 
-## OSGi Annotations
+### OSGi Annotations
 
 - @Component – Defines the component class and properties.Common options are:
   - service – The service(s) this component implements
@@ -94,8 +151,11 @@ OSGi 有一个 SCR(Service Component Runtime) 来管理所有 Component。`@Comp
 - @Activate – Method to call when component is started
 - @Deactivate – Method to call when component is stopped
 - @Reference – Inject another OSGi Service
+- @ObjectClassDefinition - Define admin configuration
+- @AttributeDefinition - Define attributes in admin configuration
+- @Designate - Use admin configuration in Component
 
-## Felix SCR annotations(Deprecated)
+### Felix SCR annotations(Deprecated)
 
 ```java
 @Component(immediate = true)
@@ -117,6 +177,9 @@ public class ServiceImpl extends ServiceInterface {
 - @Service – Define an OSGi Service
 - @Property – Define a meta property for an OSGi Component/Service
 - @Reference – Retrieve an OSGi Service
+- @Activate – Method to call when component is started
+- @Deactivate – Method to call when component is stopped
+- @Modified
 
 ## Servelts
 
@@ -346,6 +409,13 @@ public class MyEventHandler implements EventHandler {
     }
 }
 ```
+
+#### Types of Events
+
+- Predefined Events
+- Service Events
+- Configuration Events
+- JSR observation Events
 
 ### Jobs
 
