@@ -20,12 +20,23 @@
 
 来获得 ResourceResolver 和 Seesion。但是，他们现在都已经被丢弃了。现在要想获得 ResourceResolver 和 Session，需要是使用 System User。
 
-创建 System User 的步骤
+### 创建 System User
 
 1. Go to [CRX Explorer](http://localhost:4502/crx/explorer/index.jsp) and loggin
 2. Click User Administration
 3. Create system User from Top Bar and Close. You can find the Node at `/home/users/system/demouser`
    ![sysuser-1](./images/sysuser-1.png)
+
+为了获得 System User 这个节点并迁移到新 AEM Server 或将此放入版本控制中，需要将 System User 打包出来。
+
+1. Go to [packagers](http://localhost:4502/miscadmin#/etc/acs-commons/packagers)
+2. Create a new Page
+   ![acl](./images/acl-1.png)
+3. Double click the newly Page, edit it
+   ![acl2](./images/acl-2.png)
+4. Create Package and go to [package](http://localhost:4502/crx/packmgr/index.jsp)
+5. Build and download the package.
+6. Copy package to soruce code or install to new AEM Server
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -36,14 +47,16 @@
     rep:principalName="demouser"/>
 ```
 
-配置 System User 权限的步骤
+### 配置 System User 权限
 
 1. Navigate to [User Admin Console](http://localhost:4502/useradmin)
 2. Search for your user (demouser)
 3. Select your user and go to Permissions Tab. Provide full access to /content folder
    ![sysuser-2](./images/sysuser-2.png)
 
-配置 Service User Mapping
+为了获得权限并迁移到新 AEM Server 或将此放入版本控制中，需要将打包出来。可以参考 System User 迁移的做法。不同点在于，第 2 步的 Page Tempalte 选择**ACL Packager**,然后在第 3 步修改**Principal names**和**Include patterns**
+
+### 配置 Service User Mapping
 
 1. 可在[User Mapper Amendment](http://localhost:4502/system/console/configMgr)
 2. 直接在 config 文件夹下写 org.apache.sling.serviceusermapping.impl.ServiceUserMapperImpl.amended-demo.xml
@@ -58,7 +71,7 @@
 
    文件名格式为`org.apache.sling.serviceusermapping.impl.ServiceUserMapperImpl.amended-<a unique name for your factory configuration>.xml`。user.mapping 的格式为 bundleId [ ":" subServiceName ] "=" userName'
 
-通过 System User 获得 ResourceResolver 和 Session
+### 通过 System User 获得 ResourceResolver 和 Session
 
 ```java
 String resourcePath = "/content/demoproject/en/demoNode";
