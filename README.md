@@ -6,30 +6,6 @@
 
 ## Front End
 
-前端主要包括两方面
-
-1. 立足标准，系统性总结和整理前端知识，建立认知和方法论。主要包括 HTML/JavaScript/CSS/Browser。
-2. 放眼团队，从业务和工程角度思考前端价值和发展。主要包括前端工程化相关知识。
-
-[思维导图](https://www.processon.com/mindmap/5a5ca9efe4b0abe85d57b564)
-
-### HTML
-
-- [HTML](/HTML/HTML.md)
-
-### CSS
-
-- [CSS](/CSS/CSS.md)
-- [Sass 入门](/CSS/Sass入门.md)
-
-### JavaScript
-
-对任何编程语言来说，必定是**用规定的文法，表达特定语义，最终操作运行时**。
-
-- [文法](/JavaScript/文法.md)
-- [语义](/JavaScript/语义.md)
-- [运行时](/JavaScript/运行时.md)
-
 #### Others
 
 - [ECMAScript6 入门](/JavaScript/ECMAScript6入门.md)
@@ -65,14 +41,6 @@
 - [Redux 学习笔记-04-异步 Actions](/Redux/异步Actions.md)
 - [Redux 学习笔记-05-中间件](/Redux/中间件.md)
 - [Redux 学习笔记-06-React + Redux + React Router](/Redux/React+Redux+ReactRouter.md)
-
-### Browser
-
-- [Browser](/Browser/Browser.md)
-
-### 前端工程实践
-
-- [Browser](/Browser/Browser.md)
 
 ### 微信小程序
 
