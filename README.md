@@ -1,15 +1,12 @@
 # CONTENTS
 
-## Others
+## AEM
 
-- [ECMAScript6 入门](/JavaScript/ECMAScript6入门.md)
+- [AEM](/AEM/AEM.md)
 
-## YDKJS
+## .NET
 
-- [YDKJS 笔记--Scope&Closure](/YDKJS/Scope-Closure.md)
-- [YDKJS 笔记--this 详解](/YDKJS/this详解.md)
-- [YDKJS 笔记--Object 详解](/YDKJS/Object详解.md)
-- [YDKJS 笔记--异步和性能](/YDKJS/异步和性能.md)
+- [C# Basic](/C-Sharp/C-Sharp-basic.md)
 
 ## Functiona Program
 
@@ -21,6 +18,27 @@
 - [Functional-Light-JS 读书笔记(六)-递归(TO-DO)](</FP/递归(TO-DO).md>)
 - [Functional-Light-JS 读书笔记(七)-常用的 FP 方法](/FP/常用的FP方法.md)
 - [Functional-Light-JS 读书笔记(八)-Observables](/FP/Observables.md)
+
+## 前端模块化
+
+- [CommonJS 和 ES6 Modules](/FrontEndModules/CommonJS和ES6Modules.md)
+- [Webpack4 使用指南](/FrontEndModules/webpack4-guide.md)
+
+## 微信小程序
+
+- [微信小程序](/MiniProgram/MiniProgram.md)
+
+## 常用短笔记
+
+- [常用短笔记](/Notes/常用短笔记.md)
+
+## 基本技能
+
+- [软技能-代码之外的生存指南](/Others/软技能-代码之外的生存指南.md)
+- [Git 使用技巧](/Others/Git使用技巧.md)
+- [敏捷技能修炼](/Others/敏捷技能修炼.md)
+- [Google Tips](/Others/google-tips.md)
+- [相对路径的简单解释](/Others/URL.md)
 
 ## React
 
@@ -36,31 +54,10 @@
 - [Redux 学习笔记-05-中间件](/Redux/中间件.md)
 - [Redux 学习笔记-06-React + Redux + React Router](/Redux/React+Redux+ReactRouter.md)
 
-## 微信小程序
+## YDKJS
 
-- [微信小程序](/MiniProgram/MiniProgram.md)
-
-## 前端模块化
-
-- [CommonJS 和 ES6 Modules](/FrontEndModules/CommonJS和ES6Modules.md)
-- [Webpack4 使用指南](/FrontEndModules/webpack4-guide.md)
-
-## .NET
-
-- [C# Basic](/C-Sharp/C-Sharp-basic.md)
-
-## 常用短笔记
-
-- [常用短笔记](/Notes/常用短笔记.md)
-
-## AEM
-
-- [AEM](/AEM/AEM.md)
-
-## 基本技能
-
-- [软技能-代码之外的生存指南](/Others/软技能-代码之外的生存指南.md)
-- [Git 使用技巧](/Others/Git使用技巧.md)
-- [敏捷技能修炼](/Others/敏捷技能修炼.md)
-- [Google Tips](/Others/google-tips.md)
-- [相对路径的简单解释](/Others/URL.md)
+- [YDKJS 笔记--作用域](/YDKJS/01.作用域.md)
+- [YDKJS 笔记--闭包](/YDKJS/02.闭包.md)
+- [YDKJS 笔记--this 详解](/YDKJS/03.this详解.md)
+- [YDKJS 笔记--Object 详解](/YDKJS/04.Object详解.md)
+- [YDKJS 笔记--异步和性能](/YDKJS/异步和性能.md)
