@@ -21,7 +21,6 @@
 
 ## 前端模块化
 
-- [CommonJS 和 ES6 Modules](/FrontEndModules/CommonJS和ES6Modules.md)
 - [Webpack4 使用指南](/FrontEndModules/webpack4-guide.md)
 
 ## 微信小程序
