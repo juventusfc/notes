@@ -16,7 +16,7 @@ Facebook 为了解决了两个问题，开发出了 React。React 其实就是�
 
 ## 组件方式构建 UI
 
-组件主要由 `props` 和 `state` 组成 `view`，可以理解为一个纯函数。`props` 是由上层组件传递给下层组件的，下层组件不能修改上层组件传给它的`props`，这叫做组件间的单向数据流(注意，Flux 单向数据流指的是整个 React 应用的数据流)。
+组件主要由 `props` 和 `state` 组成 `view`，可以理解为一个纯函数。`props` 是由上层组件(使用者)传递给下层组件的，下层组件不能修改上层组件传给它的`props`，这叫做组件间的单向数据流(注意，Flux 单向数据流指的是整个 React 应用的数据流)。
 
 组件设计时，遵循的原则有：
 
@@ -32,97 +32,200 @@ form 表单相关的元素比较特殊，在 React 中由两种设计思路：
    受控组件的表单元素由使用者维护。
 
    ```javascript
-   <input
-     type="text"
-     value={this.state.value}
-     onChange={e => this.setState({ value: e.target.value })}
-   />
+   // 受控组件<input />
+   class NameForm extends React.Component {
+     constructor(props) {
+       super(props);
+       this.state = { value: "" };
+
+       this.handleChange = this.handleChange.bind(this);
+       this.handleSubmit = this.handleSubmit.bind(this);
+     }
+
+     handleChange(event) {
+       this.setState({ value: event.target.value });
+     }
+
+     handleSubmit(event) {
+       alert("A name was submitted: " + this.state.value);
+       event.preventDefault();
+     }
+
+     render() {
+       return (
+         <form onSubmit={this.handleSubmit}>
+           <label>
+             Name:
+             <input
+               type="text"
+               value={this.state.value}
+               onChange={this.handleChange}
+             />
+           </label>
+           <input type="submit" value="Submit" />
+         </form>
+       );
+     }
+   }
    ```
 
 2. 非受控组件  
    非受控组件的表单元素由 DOM 维护。
 
    ```javascript
-   <input type="text" ref={node => (this.input = node)} />
+   // 非受控组件<input />
+   class NameForm extends React.Component {
+     constructor(props) {
+       super(props);
+       this.handleSubmit = this.handleSubmit.bind(this);
+     }
+
+     handleSubmit(event) {
+       alert("A name was submitted: " + this.input.value);
+       event.preventDefault();
+     }
+
+     render() {
+       return (
+         <form onSubmit={this.handleSubmit}>
+           <label>
+             Name:
+             <input type="text" ref={input => (this.input = input)} />
+           </label>
+           <input type="submit" value="Submit" />
+         </form>
+       );
+     }
+   }
    ```
-
-```javascript
-// 受控组件通过setState来控制组件状态
-class NameForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { value: "" };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({ value: event.target.value });
-  }
-
-  handleSubmit(event) {
-    alert("A name was submitted: " + this.state.value);
-    event.preventDefault();
-  }
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          <input
-            type="text"
-            value={this.state.value}
-            onChange={this.handleChange}
-          />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-    );
-  }
-}
-
-// 非受控组件由DOM处理组件状态
-class NameForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit(event) {
-    alert("A name was submitted: " + this.input.value);
-    event.preventDefault();
-  }
-
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Name:
-          <input type="text" ref={input => (this.input = input)} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-    );
-  }
-}
-```
 
 ## JSX
 
-JSX 不是模板语言，而是一种语法糖,能通过 javascript 改变 DOM。
+JSX 不是模板语言，是 JavaScript + XML，可以在 JavaScript 中直接写 HTML 标记 ，可以看作是一种语法糖，通过 Babel 将 JSX 转化为 ES5 的 javascript 代码， 改变 DOM。
+
+JSX 的语法主要是使用标签元素，如果里面要使用 JavaScript，则在 `{}` 里写 JavaScript 代码。
+
+1. JSX 本身也是表达式  
+   `const element = <h1>Hello, wWrld!</h1>`
+2. 在属性中使用表达式  
+   `<MyComponent foo={1 + 2 + 3} />`
+3. 延展属性
+
+   ```javascript
+   const props = { firstName: "frank", lastName: "hu" };
+   const greeting = <Greeting {...props} />;
+   ```
+
+4. 表达式作为子元素  
+   `const element = <li>{props.message}</li>`
+
+在 JSX 中，小写的 tag 是原生节点，如：`<div>`；大写的 tag 是自定义的组件，如：`<Greeting />`。
+
+### 在 HTML 中直接使用
+
+引入脚本：
+
+1. react
+2. react-dom
+3. babel
+
+### 在脚手架生成的 app 中使用
+
+用脚手架工具生成 app，然后使用 React 技术。
+
+一般在写 Component 的时候，会使用 JSX 和 ES6 语法，然后使用 Babel 将这些代码转化为浏览器可识别的代码，之后用 Webpack 打包。
+
+这也是 JSX 方式写 Component 一定要引用 react 模块的原因，因为 Babel 将 JSX 转化为 ES5 代码后，转化后代码中会有 React.createElement 等方法。
 
 ```javascript
-const element = <h1>Hello, {name}</h1>;
+// JSX 写法创建组件
+const element = <h1 className="greeting">Hello, world!</h1>;
 
-// 等价于
-const element = React.createElement("h1", null, "Hello ", name);
+// Babel转化后，转化为 ES5
+var element = React.createElement(
+  "h1",
+  { className: "greeting" },
+  "Hello, world!"
+);
+
+// 运行后产生的 element 对象
+const element = {
+  type: "h1",
+  props: {
+    className: "greeting",
+    children: "Hello, world!"
+  }
+};
 ```
 
 ## 生命周期
 
 ![life-cycle](./images/react-lifecycle.PNG)
+
+在理解生命周期 Updating 过程时，需要分清:
+
+1. `nextProps` 和 `nextState`
+2. `this.props` 和 `this.state`
+3. `prevProps` 和 `prevState`
+
+在 React 组件中，我们可以这么考虑。在现在这个时间，render 以 `this.state.color = "red"` 为基准渲染出了 View。
+执行 `this.setState({color:"green"})` 会有如下步骤：
+
+1. 执行 `shouldComponentUpdate(nextProps, nextState)`:  
+   `this.state.color = "red"`  
+   `nextState.color = "green"`
+2. 执行 `render()`:  
+   `this.state.color = "green"`
+3. 执行 `componentDidUpdate(prevProps, prevState, snapshot)`:  
+   `this.state.color = "green"`  
+   `prevState.color = "red"`
+
+### `constructor(props)`
+
+主要用途有：
+
+1. 用于初始化内部状态，很少使用。是唯一可以直接修改 `state` 的地方
+2. 用于绑定组件事件中的 `this`
+
+### `static getDerivedStateFromProps(props, state)`
+
+1. 当 `state` 需要从 `props` 初始化时使用
+2. 尽量不要使用。维护两者状态一致性会增加复杂度
+3. 每次 render 都会调用
+4. 典型场景：表单控件获取默认值
+
+### `render()`
+
+一个纯函数，根据 `this.props` 和 `this.state` 获取当前的 `view`。
+
+### `componentDidMount()`
+
+1. UI 渲染完成后调用
+2. 只执行一次
+3. 典型场景: 获取外部资源
+
+### `shouldComponentUpdate(nextProps, nextState)`
+
+如果组件在其他地方执行了`this.setState`，那么，会执行这个步骤里。在执行这个步骤的时候， `nextState` 是 `this.setState` 执行后新的 `state`，但此时， `this.state` 还是原来的，并没有更改。也就是说， `this.state` 是跟 `render()` 同步的，如果 `shouldComponentUpdate(nextProps, nextState)` 返回了 false， 则 `render()` 不执行， `this.state` 还是保留的原来的值。
+
+1. 决定 Virtual DOM 是否要重绘
+2. 一般可以由 PureComponent 自动实现
+3. 典型场景:性能优化
+
+### `getSnapshotBeforeUpdate(prevProps, prevState)`
+
+1. 在页面渲染到 DOM 前调用， `this.state` 已更新
+2. 典型场景: 获取渲染前的 DOM
+
+### `componentDidUpdate(prevProps, prevState, snapshot)`
+
+1. 每次 UI 更新时被调用
+2. 典型场景: 页面需要根据 props 变化重新获取数据
+
+### `componentWillUnmount()`
+
+1. 组件移除时被调用
+2. 典型场景: 资源释放
 
 ## HOC
 

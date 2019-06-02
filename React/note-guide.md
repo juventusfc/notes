@@ -124,45 +124,6 @@ uncontrolled components
    }
    ```
 
-## 如何使用 React
-
-### 在 HTML 中直接引用
-
-引入脚本：
-
-1. react
-2. react-dom
-3. babel
-
-### 在 app 中使用
-
-用脚手架工具生成 app，然后使用 React 技术。
-
-一般在写 Component 的时候，会使用 JSX 和 ES6 语法，然后使用 Babel 将这些代码转化为浏览器可识别的代码，之后用 Webpack 打包。
-
-这也是 JSX 方式写 Component 一定要引用 react 模块的原因，因为 Babel 将 JSX 转化为 ES5 代码后，转化后代码中会有 React.createElement 等方法。
-
-```javascript
-// JSX 写法
-const element = <h1 className="greeting">Hello, world!</h1>;
-
-// 转化为 ES5
-var element = React.createElement(
-  "h1",
-  { className: "greeting" },
-  "Hello, world!"
-);
-
-// 运行后产生的 element 对象
-const element = {
-  type: "h1",
-  props: {
-    className: "greeting",
-    children: "Hello, world!"
-  }
-};
-```
-
 ## 工具库
 
 - 初始化
