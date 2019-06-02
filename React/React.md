@@ -1,6 +1,50 @@
 # React
 
-## 受控组件（推荐使用） VS 非受控组件
+## 出现背景及特性
+
+传统的前端开发中，使用 jQuery 进行 UI 的开发。但是，传统的前端开发面临了两个大问题：
+
+1. UI 操作关注了大量细节。jQuery 的 API 众多，直接对 DOM 进行操作，很容易让开发者陷入细节而混淆了总体设计。
+2. 应用程序的状态分散的各处，无法追踪和维护。
+
+Facebook 为了解决了两个问题，开发出了 React。React 其实就是一个 View 层，引入了：
+
+1. 1 个新概念： 组件
+2. 4 个主要 API:
+3. 单向数据流: 引入 Flux 设计方式，简化状态管理
+4. 完善的错误提示
+
+## 组件方式构建 UI
+
+组件主要由 `props` 和 `state` 组成 `view`，可以理解为一个纯函数。`props` 是由上层组件传递给下层组件的，下层组件不能修改上层组件传给它的`props`，这叫做组件间的单向数据流(注意，Flux 单向数据流指的是整个 React 应用的数据流)。
+
+组件设计时，遵循的原则有：
+
+1. 让组件无自身 `state`，所需数据从 `props` 获取
+2. DRY 原则
+3. 单一职责原则
+
+### 受控组件（推荐使用） VS 非受控组件
+
+form 表单相关的元素比较特殊，在 React 中由两种设计思路：
+
+1. 受控组件  
+   受控组件的表单元素由使用者维护。
+
+   ```javascript
+   <input
+     type="text"
+     value={this.state.value}
+     onChange={e => this.setState({ value: e.target.value })}
+   />
+   ```
+
+2. 非受控组件  
+   非受控组件的表单元素由 DOM 维护。
+
+   ```javascript
+   <input type="text" ref={node => (this.input = node)} />
+   ```
 
 ```javascript
 // 受控组件通过setState来控制组件状态
