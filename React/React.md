@@ -227,48 +227,111 @@ const element = {
 1. 组件移除时被调用
 2. 典型场景: 资源释放
 
-## HOC
+## Virtual DOM 和 key
 
-HOC 是包裹另一个 React 组件的 React 组件。[在线 DEMO](https://codesandbox.io/s/84296x60y0)
+React 引入了虚拟 DOM 的概念。虚拟 DOM 使用 diff 算法，根据广度优先原则，加快了真实 DOM 的渲染。
+
+在进行 diff 算法运算时，比较虚拟 DOM 的改变：
+
+- 如果当前层级，节点只是修改了前后关系，则根据 key 重新排列节点
+- 如果当前层级，节点类型/节点数目进行了改变，则直接将变化了的节点删除，创建新的节点
+
+## 组件复用 - 高阶组件 HOC
+
+HOC 是包裹另一个 React 组件的 React 组件，它接受组件作为参数，返回一个新的组件。
 
 ```javascript
-hocFactory:: WrappedComponent: React.Component => EnhancedComponent: React.Component
+hocFactory:: (WrappedComponent: React.Component) => EnhancedComponent: React.Component
 ```
 
-### Props Proxy
-
-整合 WrappedComponent 需要的 props。
+![hoc](./images/hoc.png)
 
 ```javascript
-function ppHOC(WrappedComponent) {
-  return class PP extends React.Component {
+// 定义一个高阶组件。在这个高阶组件中，time 是新传入进原来 WrappedComponent 的 props， {...this.props} 是原来就要传进 WrappedComponent 的 props
+import React from "react";
+
+export default function withTimer(WrappedComponent) {
+  return class extends React.Component {
+    state = { time: new Date() };
+    componentDidMount() {
+      this.timerID = setInterval(() => this.tick(), 1000);
+    }
+
+    componentWillUnmount() {
+      clearInterval(this.timerID);
+    }
+
+    tick() {
+      this.setState({
+        time: new Date()
+      });
+    }
     render() {
-      return <WrappedComponent {...this.props} />; // 这里的this指向PP实例
+      return <WrappedComponent time={this.state.time} {...this.props} />;
     }
   };
 }
 ```
 
-如果需要访问 WrappedComponent 实例，需要使用 refs
-
-### Inheritance Inversion
-
-HOC 类（Enhancer）继承了 WrappedComponent。可以通过调用`super.xxMethod()`来获得 WrappedComponent 的信息。
-
 ```javascript
-function iiHOC(WrappedComponent) {
-  return class Enhancer extends WrappedComponent {
-    render() {
-      return super.render();
+// 得到一个EnhancedComponent
+import React from "react";
+import withTimer from "./withTimer";
+
+class MessageList extends React.PureComponent {
+  render() {
+    return (
+      <ul>
+        {this.props.messages.map(msg => (
+          <li>{msg}</li>
+        ))}
+      </ul>
+    );
+  }
+}
+
+export class ChatApp extends React.Component {
+  state = {
+    messages: [],
+    inputMsg: ""
+  };
+
+  handleInput = evt => {
+    this.setState({
+      inputMsg: evt.target.value
+    });
+  };
+  handleSend = () => {
+    const text = this.state.inputMsg;
+    if (text) {
+      const newMessages = [...this.state.messages, text];
+      this.setState({
+        messages: newMessages,
+        inputMsg: ""
+      });
     }
   };
+  render() {
+    return (
+      <div>
+        <MessageList messages={this.state.messages} />
+        <div>
+          <input value={this.state.inputMsg} />
+          <button onClick={this.handleSend}>Send</button>
+        </div>
+        <h2>{this.props.time.toLocaleString()}</h2>
+      </div>
+    );
+  }
 }
+
+export default withTimer(ChatApp);
 ```
 
-## 函数作为子组件
+## 组件复用 - 函数作为子组件
 
 ```javascript
-// 创建
+// 使用 children 属性，children 接收的是一个函数
 class MyComponent extends React.Component {
   render() {
     return <div>{this.props.children("Scuba Steve")}</div>;
@@ -278,7 +341,7 @@ MyComponent.propTypes = {
   children: React.PropTypes.func.isRequired
 };
 
-// 函数作为自组件使用
+// 函数作为子组件使用
 <MyComponent>{name => <div>{name}</div>}</MyComponent>;
 ```
 
@@ -367,7 +430,3 @@ Redux 相当于给应用中的所有 React Component 增加了一个全局的控
 ### bindActionCreators
 
 ActionCreator 用以生成 Action，Action 生成后还需要 dispatch 出去才能使 Redux 更新 State。bindActionCreators 能简化这个步骤，当执行 bind 后的方法，会直接 dispatch 出去 Action
-
-## // TODO
-
-1. https://reactjs.org/blog/2015/12/18/react-components-elements-and-instances.html
