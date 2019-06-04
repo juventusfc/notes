@@ -1,4 +1,4 @@
-# React
+# React 及其生态
 
 ## 出现背景及特性
 
@@ -347,65 +347,46 @@ MyComponent.propTypes = {
 
 ## Context API
 
+随着组件层级的递增，如果最下层的组件需要某个 props，但是该 props 来自最上层。为了使最下层获取该 props，我们会在各个中间层也传进去这个 props，中间层只是起到传递作用，不会对这个 props 进行更改。这样会使代码看起来很乱。 Context 提供了另外一种传递数据的方式。 Redux 就采用了这种方式。
+
 ```javascript
-import React from "react";
+// 1. Context lets us pass a value deep into the component tree
+// without explicitly threading it through every component.
+// Create a context for the current theme (with "light" as the default).
+const ThemeContext = React.createContext("light");
 
-const enStrings = {
-  submit: "Submit",
-  cancel: "Cancel"
-};
-
-const cnStrings = {
-  submit: "提交",
-  cancel: "取消"
-};
-const LocaleContext = React.createContext(enStrings); // 1. 定义Context
-
-class LocaleProvider extends React.Component {
-  state = { locale: cnStrings };
-  toggleLocale = () => {
-    const locale = this.state.locale === enStrings ? cnStrings : enStrings;
-    this.setState({ locale });
-  };
+class App extends React.Component {
   render() {
+    // 2. Use a Provider to pass the current theme to the tree below.
+    // Any component can read it, no matter how deep it is.
+    // In this example, we're passing "dark" as the current value.
     return (
-      // 2. 提供Context值
-      <LocaleContext.Provider value={this.state.locale}>
-        <button onClick={this.toggleLocale}>切换语言</button>
-        {this.props.children}
-      </LocaleContext.Provider>
+      <ThemeContext.Provider value="dark">
+        <Toolbar />
+      </ThemeContext.Provider>
     );
   }
 }
 
-class LocaledButtons extends React.Component {
-  render() {
-    return (
-      // 3. 消费Context
-      <LocaleContext.Consumer>
-        {locale => (
-          <div>
-            <button>{locale.cancel}</button>
-            &nbsp;
-            <button>{locale.submit}</button>
-          </div>
-        )}
-      </LocaleContext.Consumer>
-    );
-  }
+// A component in the middle doesn't have to
+// pass the theme down explicitly anymore.
+function Toolbar(props) {
+  return (
+    <div>
+      <ThemedButton />
+    </div>
+  );
 }
 
-export default () => (
-  <div>
-    <LocaleProvider>
-      <div>
-        <br />
-        <LocaledButtons />
-      </div>
-    </LocaleProvider>
-    <LocaledButtons />
-  </div>
-);
+class ThemedButton extends React.Component {
+  // 3. Assign a contextType to read the current theme context.
+  // React will find the closest theme Provider above and use its value.
+  // In this example, the current theme is "dark".
+  static contextType = ThemeContext;
+  render() {
+    return <Button theme={this.context} />;
+  }
+}
 ```
 
 ## 脚手架
@@ -413,15 +394,30 @@ export default () => (
 - Create-React-App:Facebook 自己出的，是学习 React 比较好用的 CLI，但是没有集成 Redux/React-Router
 - Codesandbox：在线的一款快速构建 React 应用
 - Rekit：一款在 CRA 基础上增加了 Redux 等功能的 CLI
-- React-Starter-kit：比较老的一款脚手架
 
 ## 打包和部署
 
-使用 Webpack
+打包的主要目的是将代码编译为浏览器可以识别的代码，同时也起到整合资源和优化代码体积的目的。
+
+一般使用 Webpack 进行打包。在打包时，需要注意：
+
+1. 环境变量的设置
+2. 禁用开发时的代码，如 logger 等
+3. 设置应用的根路径
 
 ## Redux
 
-Redux 相当于给应用中的所有 React Component 增加了一个全局的控制机制，用户通过这个机制控制 Redux Store State，所有 React Component 根据 Redux Store State 来组成虚拟 DOM，用以生成 DOM
+React 解决了组件状态与 DOM 的对应关系问题: `state + props => view`。
+
+Redux 解决了整个应用的状态管理问题。Context API 提出了一种方案，可以不用层层传递 props 到最底层，而通过提供全局的 Context 来提供全局的数据状态。高阶组件也提出一种方式，通过封装，给组件提供额外的 props。Redux 整合了这个思路，通过引入`react-redux`，将 Redux 和 React 整合起来，相当于给 React 组件提供了一个全局可用的 Context，这个 Context 就是 Redux 的 Store。
+
+Redux 相当于给应用中的所有 React 组件增加了一个全局的控制机制，用户通过这个机制控制 Store，所有订阅了 Store 的 React 组件根据 Redux Store State 来更新 DOM。
+
+Redux 特性：
+
+1. 单一数据源，也就是说只有一个 Store
+2. 可预测性，`state + action => new state`
+3. 纯函数更新，也就是说更新 Store 只能通过 Reducer，Reducer 是纯函数
 
 ### combineReducers
 

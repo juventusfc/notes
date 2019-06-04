@@ -2,9 +2,53 @@
 
 ![architecture](./images/redux.gif)
 
-## Basic parts
+```javascript
+import { createStore } from "redux";
 
-### Actions
+/**
+ * This is a reducer, a pure function with (state, action) => state signature.
+ * It describes how an action transforms the state into the next state.
+ *
+ * The shape of the state is up to you: it can be a primitive, an array, an object,
+ * or even an Immutable.js data structure. The only important part is that you should
+ * not mutate the state object, but return a new object if the state changes.
+ *
+ * In this example, we use a `switch` statement and strings, but you can use a helper that
+ * follows a different convention (such as function maps) if it makes sense for your
+ * project.
+ */
+function counter(state = 0, action) {
+  switch (action.type) {
+    case "INCREMENT":
+      return state + 1;
+    case "DECREMENT":
+      return state - 1;
+    default:
+      return state;
+  }
+}
+
+// Create a Redux store holding the state of your app.
+// Its API is { subscribe, dispatch, getState }.
+let store = createStore(counter);
+
+// You can use subscribe() to update the UI in response to state changes.
+// Normally you'd use a view binding library (e.g. React Redux) rather than subscribe() directly.
+// However it can also be handy to persist the current state in the localStorage.
+
+store.subscribe(() => console.log(store.getState()));
+
+// The only way to mutate the internal state is to dispatch an action.
+// The actions can be serialized, logged or stored and later replayed.
+store.dispatch({ type: "INCREMENT" });
+// 1
+store.dispatch({ type: "INCREMENT" });
+// 2
+store.dispatch({ type: "DECREMENT" });
+// 1
+```
+
+## Actions
 
 _Action_ 是一个简单对象。当该对象被 _store.dispatch(action)_ 后，_Reducers_ 会根据这个 _Action_ 更新 _Store_ 中的 _state_。  
 _Action_ 需要定义*type*属性。
@@ -13,7 +57,7 @@ _Action_ 需要定义*type*属性。
 { type: 'ADD_TODO', text: 'Go to swimming pool' }
 ```
 
-#### Action Creators
+### Action Creators
 
 顾名思义，是产生 Action 的函数。
 
@@ -28,7 +72,7 @@ function addTodo(text) {
 dispatch(addTodo(text));
 ```
 
-### Reducers
+## Reducers
 
 _Reducer_ 是一个纯净函数，输入为旧的 _state_ 和 _action_，输出为新的 _state_。
 
@@ -108,7 +152,7 @@ const todoApp = combineReducers({
 export default todoApp
 ```
 
-### Store
+## Store
 
 _Store_ 是存放应用 state 的地方。常用方法有：
 
@@ -116,7 +160,7 @@ _Store_ 是存放应用 state 的地方。常用方法有：
 2. dispatch(action) // 发出一个 action。 Store 自动调用 reducer 更新 state。
 3. subscribe(listener) // 当 state 有更改后，会执行回调函数
 4. unsubscribe listener 通过  
-    `const listener1 = subscribe(listener); listener1();` 实现。
+   `const listener1 = subscribe(listener); listener1();` 实现。
 
 _Store_ 中的 state 类似于：
 
@@ -141,7 +185,7 @@ import todoApp from "./reducers";
 const store = createStore(todoApp);
 ```
 
-### 数据流向
+## 数据流向
 
 1. store.dispatch(action)发起一个 action
 2. store 调用 reducer，产生新的 state
