@@ -413,16 +413,226 @@ Redux 解决了整个应用的状态管理问题。Context API 提出了一种�
 
 Redux 相当于给应用中的所有 React 组件增加了一个全局的控制机制，用户通过这个机制控制 Store，所有订阅了 Store 的 React 组件根据 Redux Store State 来更新 DOM。
 
-Redux 特性：
+Redux 的三大特性：
 
 1. 单一数据源，也就是说只有一个 Store
 2. 可预测性，`state + action => new state`
 3. 纯函数更新，也就是说更新 Store 只能通过 Reducer，Reducer 是纯函数
 
-### combineReducers
+![architecture](./images/redux.gif)
 
-生成 Store 时，需要给定 Reducer。当有多个 Reducer 时，使用 combineReducers 组成一个包括所有 Reducers 的 Reducer。初始化生成的 Store State 包含所有 Reducers 中定义的 initial state。
+### 数据流向
 
-### bindActionCreators
+1. store.dispatch(action)发起一个 action
+2. store 调用 reducer，产生新的 state
+3. store 保存新的 state
+4. 由于 state 有了更新，执行 subscribe 中的监听函数
 
-ActionCreator 用以生成 Action，Action 生成后还需要 dispatch 出去才能使 Redux 更新 State。bindActionCreators 能简化这个步骤，当执行 bind 后的方法，会直接 dispatch 出去 Action
+### Action
+
+Action 是一个简单对象。当该对象被 Store dispatch 后， Reducers 会根据这个 Action 更新 Store 中的 state。
+
+Action 需要定义 type 属性。
+
+```javascript
+{ type: 'ADD_TODO', text: 'Go to swimming pool' }
+```
+
+#### Action Creators
+
+顾名思义，是产生 Action 的函数。
+
+```javascript
+function addTodo(text) {
+  return {
+    type: ADD_TODO,
+    text
+  };
+}
+```
+
+#### bindActionCreators
+
+产生 Action 后，要将此 Action Dispatch 出去 Reducer 才会去处理该 Action 从而更新 Store 中的 state。为了简便处理产生 Action 和 Dispatch，Redux 提供了 bindActionCreators 来简化这一步骤。bindActionCreators 表示将 Action Creators 产生的 Action Dispatch 出去。
+
+### Reducer
+
+Reducer 是一个纯净函数，输入为旧的 state 和 Action\_，输出为新的 state。
+
+```javascript
+function todoApp(state = initialState, action) {
+  switch (action.type) {
+    case SET_VISIBILITY_FILTER:
+      return Object.assign({}, state, {
+        visibilityFilter: action.filter
+      });
+    case ADD_TODO:
+      return Object.assign({}, state, {
+        todos: [
+          ...state.todos,
+          {
+            text: action.text,
+            completed: false
+          }
+        ]
+      });
+    default:
+      return state;
+  }
+}
+```
+
+上面的代码中，多个 action.type 混在一起，会造成代码混乱。实际应用中，会将多个 Reducer 根据 type 进行拆分,然后在总的 Reducer 中进行组装。
+
+拆分成多个 Reducers：
+
+```javascript
+function todos(state = [], action) {
+  switch (action.type) {
+    case ADD_TODO:
+      return [
+        ...state,
+        {
+          text: action.text,
+          completed: false
+        }
+      ]
+    default:
+      return state
+  }
+}
+​
+function visibilityFilter(state = SHOW_ALL, action) {
+  switch (action.type) {
+    case SET_VISIBILITY_FILTER:
+      return action.filter
+    default:
+      return state
+  }
+}
+```
+
+将多个 Reducers 统一管理：
+
+```javascript
+function todoApp(state = {}, action) {
+  return {
+    visibilityFilter: visibilityFilter(state.visibilityFilter, action),
+    todos: todos(state.todos, action)
+  };
+}
+```
+
+#### combineReducers
+
+Redux 提供了一个 combineReducers 来统领所有 Reducer 。功能与上面代码中的 todoApp 类似。
+
+```javascript
+import { combineReducers } from 'redux'
+​
+const todoApp = combineReducers({
+  visibilityFilter,
+  todos
+})
+​
+export default todoApp
+```
+
+### Store
+
+Store 是存放整个应用状态的地方。
+
+创建方法：
+
+```javascript
+import { createStore } from "redux";
+import todoApp from "./reducers";
+const store = createStore(todoApp);
+```
+
+常用方法有：
+
+1. `getState()`: 获取当前 state
+2. `dispatch(action)`: 发出一个 action。 Store 自动调用 reducer 更新 state。
+3. `subscribe(listener)`:当 state 有更改后，会执行回调函数
+4. unsubscribe listener: 通过 `const listener1 = subscribe(listener); listener1();` 实现。
+
+Store 中的 state 的形式为：
+
+```javascript
+{
+  todos: [{
+    text: 'Eat food',
+    completed: true
+  }, {
+    text: 'Exercise',
+    completed: false
+  }],
+  visibilityFilter: 'SHOW_COMPLETED'
+}
+```
+
+## Redux 与 React 的结合使用
+
+Redux 是不一定要和 React 绑定使用的，它只是状态管理工具。如果需要将 Redux 和 React 结合使用，需要引入 `react-redux` 包。
+
+在 React 中使用 Redux，需要将 React 组件分为展示组件和容器组件。展示组件只负责展示，容器组件负责与 Redux 通信。
+
+Redux 与 React 的结合，主要使用了 Context API 和高阶组件。Context API 提供了全局可用的 Store，高阶组件`connect()(wrappedComponent)`实现了给 WrappedComponent 传递额外 props 的能力。
+
+connect 实现高阶组件：
+
+```javascript
+import React from "react";
+import { connect } from "react-redux";
+import { addTodo } from "../actions";
+
+let AddTodo = ({ dispatch }) => {
+  let input;
+
+  return (
+    <div>
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          if (!input.value.trim()) {
+            return;
+          }
+          dispatch(addTodo(input.value));
+          input.value = "";
+        }}
+      >
+        <input
+          ref={node => {
+            input = node;
+          }}
+        />
+        <button type="submit">Add Todo</button>
+      </form>
+    </div>
+  );
+};
+AddTodo = connect()(AddTodo);
+
+export default AddTodo;
+```
+
+Provider 提供 Context：
+
+```javascript
+import React from "react";
+import { render } from "react-dom";
+import { Provider } from "react-redux";
+import { createStore } from "redux";
+import todoApp from "./reducers";
+import App from "./components/App";
+
+const store = createStore(todoApp);
+
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById("root")
+);
+```

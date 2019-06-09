@@ -154,7 +154,7 @@ uncontrolled components
 
 - **Boilerplate**: create-react-app (with eject if required)
 - Utility: JavaScript ES6 + Lodash
-- **Styling**: CSS modules
+- **Styling**: CSS modules/ CSS in JS
 - Requests: axios + fetch
 - Higher Order Components: maybe + optional recompose
 - **Formatting**: Prettier
@@ -163,7 +163,7 @@ uncontrolled components
 - **Routing**: React Router
 - Authentication: Solution with an own Express/Hapi/Koa Node.js Server with Passport.js
 - Database: Solution with an own Express/Hapi/Koa Node.js Server with a SQL or NoSQL Database
-- **UI Components**: Semantic UI
+- **UI Components**: Semantic UI/ AntD
 - Time: moment or date-fns
 - **Testing**: Jest with Enzyme
 - **Bundle**: Babel + Webpack
