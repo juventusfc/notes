@@ -405,7 +405,7 @@ class ThemedButton extends React.Component {
 2. 禁用开发时的代码，如 logger 等
 3. 设置应用的根路径
 
-## Redux
+## Redux 主要概念
 
 React 解决了组件状态与 DOM 的对应关系问题: `state + props => view`。
 
@@ -636,3 +636,59 @@ render(
   document.getElementById("root")
 );
 ```
+
+## Redux 中的异步 Action
+
+异步 Action 不是特殊的 Action，是多个同步 Action 的组合使用。
+
+中间件(Middleware)会截取异步 Action 并进行特殊处理。
+
+针对异步处理，一般设计步骤包括：
+
+1. 设计store的state
+2. 设计reducer
+3. 设计同步action
+4. 设计异步action(这是唯一一步与原来不一样的)
+
+社区主要有两种解决方案：`redux-thunk` 和 `redux-saga`。
+
+### redux-thunk
+
+redux-thunk作为Redux的中间件，除了能处理同步Action(Plain Object),还可以处理异步Action(函数)。
+
+配置redux-thunk:
+
+```javascript
+const middleware = [thunk]; // redux-thunk
+if (process.env.NODE_ENV !== "production") {
+  middleware.push(createLogger()); // redx-logger
+}
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // redux dev tool
+const store = createStore(
+  reducer,
+  composeEnhancers(applyMiddleware(...middleware))
+);
+```
+
+同步Action：
+
+```javascript
+export const selectSubreddit = subreddit => ({
+  type: SELECT_SUBREDDIT,
+  subreddit
+})
+```
+
+异步Action：
+
+```javascript
+export const fetchPostsIfNeeded = subreddit => (dispatch, getState) => {
+  if (shouldFetchPosts(getState(), subreddit)) {
+    return dispatch(fetchPosts(subreddit))
+  }
+}
+```
+
+### redux-saga
+
+// TODO
