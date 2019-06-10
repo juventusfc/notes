@@ -457,7 +457,7 @@ function addTodo(text) {
 
 ### Reducer
 
-Reducer 是一个纯净函数，输入为旧的 state 和 Action\_，输出为新的 state。
+Reducer 是一个纯净函数，输入为旧的 state 和 Action，输出为新的 state。
 
 ```javascript
 function todoApp(state = initialState, action) {
@@ -645,18 +645,18 @@ render(
 
 针对异步处理，一般设计步骤包括：
 
-1. 设计store的state
-2. 设计reducer
-3. 设计同步action
-4. 设计异步action(这是唯一一步与原来不一样的)
+1. 设计 store 的 state
+2. 设计 reducer
+3. 设计同步 action
+4. 设计异步 action(这是唯一一步与原来不一样的)
 
 社区主要有两种解决方案：`redux-thunk` 和 `redux-saga`。
 
 ### redux-thunk
 
-redux-thunk作为Redux的中间件，除了能处理同步Action(Plain Object),还可以处理异步Action(函数)。
+redux-thunk 作为 Redux 的中间件，除了能处理同步 Action(Plain Object),还可以处理异步 Action(函数)。
 
-配置redux-thunk:
+配置 redux-thunk:
 
 ```javascript
 const middleware = [thunk]; // redux-thunk
@@ -670,25 +670,55 @@ const store = createStore(
 );
 ```
 
-同步Action：
+同步 Action：
 
 ```javascript
 export const selectSubreddit = subreddit => ({
   type: SELECT_SUBREDDIT,
   subreddit
-})
+});
 ```
 
-异步Action：
+异步 Action：
 
 ```javascript
 export const fetchPostsIfNeeded = subreddit => (dispatch, getState) => {
   if (shouldFetchPosts(getState(), subreddit)) {
-    return dispatch(fetchPosts(subreddit))
+    return dispatch(fetchPosts(subreddit));
   }
-}
+};
 ```
 
 ### redux-saga
 
 // TODO
+
+## Redux 中的 state 是不可变数据
+
+Reducer 在处理过程中，遵循 `state + action => new state` 规则，不会改变原来的 state，只会产生新的 state 替代原来的 state。
+
+有三种操作不可变数据的方法：
+
+1. 原生写法: `{...}` 或 `Object.assign`
+2. `immutability-helper`
+3. `immer`
+
+   ```javascript
+   import produce from "immer";
+
+   const baseState = [
+     {
+       todo: "Learn typescript",
+       done: true
+     },
+     {
+       todo: "Try immer",
+       done: false
+     }
+   ];
+
+   const nextState = produce(baseState, draftState => {
+     draftState.push({ todo: "Tweet about it" });
+     draftState[1].done = true;
+   });
+   ```
