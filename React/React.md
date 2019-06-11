@@ -781,3 +781,23 @@ URL 传递参数给组件的步骤：
 
 `connected-react-router`
 // TODO
+
+## Ant Design && Material UI && Semantic UI
+
+// TODO
+
+考虑因素：
+
+1. 组件库是否齐全
+2. 样式风格是否符合业务需求
+3. API 设计是否便捷和灵活
+4. 技术支持是否完善
+5. 开发是否活跃
+
+## Next.js 构建同构应用
+
+![同构](./images/同构.png)
+
+## Unit test
+
+Jest + Enzyme
