@@ -814,4 +814,17 @@ Next.js 的显示过程：
 
 ## Unit test
 
-Jest + Enzyme
+- Jest: 测试框架
+- react-testing-library: 类似于 Enzyme，但是主要基于 DOM
+- JS DOM: 浏览器环境的 NodeJS 模拟
+- Enzyme: 组件渲染和测试
+- nock: 模拟 HTTP 请求
+- sinon: 函数模拟和调用跟踪
+- istanbul: 代码覆盖率
+
+## 开发工具
+
+- ESLint: 语法检查。在代码中配置并在 VSCode 中安装插件。
+- Prettier: 代码格式化。在代码中配置并在 VSCode 中安装插件。
+- React DevTool: React 开发工具。浏览器插件。
+- Redux DevTool: Redux 开发工具。浏览器插件。
