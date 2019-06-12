@@ -25,34 +25,34 @@ function compose(...fns) {
 }
 ```
 
-```jajascript
+```javascript
 function words(str) {
-    return String( str )
-        .toLowerCase()
-        .split( /\s|\b/ )
-        .filter( function alpha(v){
-            return /^[\w]+$/.test( v );
-        } );
+  return String(str)
+    .toLowerCase()
+    .split(/\s|\b/)
+    .filter(function alpha(v) {
+      return /^[\w]+$/.test(v);
+    });
 }
 
 function unique(list) {
-    var uniqList = [];
+  var uniqList = [];
 
-    for (let v of list) {
-        // value not yet in the new list?
-        if (uniqList.indexOf( v ) === -1 ) {
-            uniqList.push( v );
-        }
+  for (let v of list) {
+    // value not yet in the new list?
+    if (uniqList.indexOf(v) === -1) {
+      uniqList.push(v);
     }
+  }
 
-    return uniqList;
+  return uniqList;
 }
 
-
-var text = "To compose two functions together, pass the output of the first function call as the input of the second function call.";
+var text =
+  "To compose two functions together, pass the output of the first function call as the input of the second function call.";
 
 // words的output作为unique的input.写代码是从左到右，代码执行是从右到左。
-var wordsUsed = unique( words( text ) );
+var wordsUsed = unique(words(text));
 // var wordsUsed = compose(unique,words)(text);
 
 wordsUsed;

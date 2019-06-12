@@ -794,8 +794,22 @@ URL 传递参数给组件的步骤：
 4. 技术支持是否完善
 5. 开发是否活跃
 
-## Next.js 构建同构应用
+## SSR/CSR
 
+SSR 表示 Server Side Rendering, CSR 表示 Client Side Rendering。
+
+![SSR](./images/SSR.png)
+
+![CSR](./images/CSR.png)
+
+SSR 的主要优点有：
+
+1. 首屏出现时间短。由于是在服务器端渲染好整个 HTML 然后发给客户端，用户不用等待客户端去渲染 React 组件。
+2. 方便 SEO。
+
+Next.js 构建 SSR(同构应用)，Create React App 构建 CSR
+
+Next.js 的显示过程：
 ![同构](./images/同构.png)
 
 ## Unit test
