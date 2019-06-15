@@ -19,14 +19,6 @@
 - [Functional-Light-JS 读书笔记(七)-常用的 FP 方法](/FP/常用的FP方法.md)
 - [Functional-Light-JS 读书笔记(八)-Observables](/FP/Observables.md)
 
-## 前端模块化
-
-- [Webpack4 使用指南](/FrontEndModules/webpack4-guide.md)
-
-## 微信小程序
-
-- [微信小程序](/MiniProgram/MiniProgram.md)
-
 ## 基本技能
 
 - [软技能-代码之外的生存指南](/Others/软技能-代码之外的生存指南.md)
@@ -34,15 +26,6 @@
 - [敏捷技能修炼](/Others/敏捷技能修炼.md)
 - [Google Tips](/Others/google-tips.md)
 - [相对路径的简单解释](/Others/URL.md)
-
-## Redux
-
-- [Redux 学习笔记-01-Redux 基础](/Redux/Redux基础.md)
-- [Redux 学习笔记-02-Use Redux with React](/Redux/UseReduxwithReact.md)
-- [Redux 学习笔记-03-Use Redux with React(react-redux)](</Redux/UseReduxwithReact(react-redux).md>)
-- [Redux 学习笔记-04-异步 Actions](/Redux/异步Actions.md)
-- [Redux 学习笔记-05-中间件](/Redux/中间件.md)
-- [Redux 学习笔记-06-React + Redux + React Router](/Redux/React+Redux+ReactRouter.md)
 
 ## YDKJS
 
