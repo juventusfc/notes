@@ -35,11 +35,6 @@
 - [Google Tips](/Others/google-tips.md)
 - [相对路径的简单解释](/Others/URL.md)
 
-## React
-
-- [React](/React/React.md)
-- [React Router 入门](/React/react-router.md)
-
 ## Redux
 
 - [Redux 学习笔记-01-Redux 基础](/Redux/Redux基础.md)
