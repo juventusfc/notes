@@ -22,7 +22,6 @@
 ## 基本技能
 
 - [软技能-代码之外的生存指南](/Others/软技能-代码之外的生存指南.md)
-- [Git 使用技巧](/Others/Git使用技巧.md)
 - [敏捷技能修炼](/Others/敏捷技能修炼.md)
 - [Google Tips](/Others/google-tips.md)
 - [相对路径的简单解释](/Others/URL.md)
